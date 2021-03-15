@@ -107,7 +107,7 @@ export const login = (username, password) => async (dispatch) => {
     });
     dispatch(loadUser());
   } catch (error) {
-    dispatch(setAlert("wrong username or password", "danger", 2000));
+    dispatch(setAlert("Wrong username or password!", "danger", 2000));
     const errors = error.response.data.errors;
     if (errors) {
       let i = 4000;
