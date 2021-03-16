@@ -223,14 +223,27 @@ function UpdatePatient({
           <div className="container-fluid">
             <div className="row">
               {/* left column */}
-              <div className="col-md-12">
-                {/* general form elements */}
-                <div className="card card-success">
-                  <div className="card-header">
-                    <h3 className="card-title">Update Patient</h3>
+
+              {/* mena zedt*/}
+              <div className="card" style={{ width: "100%" }}>
+                <div
+                  className="card-header"
+                  style={{ backgroundColor: "#28a745" }}>
+                  <h3 className="card-title" style={{ color: "white" }}>
+                    Update patient{" "}
+                  </h3>
+                  <div className="card-tools">
+                    <button
+                      type="button"
+                      className="btn btn-tool"
+                      data-card-widget="collapse"
+                      title="Collapse">
+                      <i className="fas fa-minus" />
+                    </button>
                   </div>
-                  {/* /.card-header */}
-                  {/* form start */}
+                </div>
+                <div className="card-body" style={{ display: "block" }}>
+                  {/* 7ot lena el code  */}
                   <form onSubmit={(e) => onSubmit(e)}>
                     <div className="card-body">
                       <div class="row">
@@ -395,16 +408,20 @@ function UpdatePatient({
                         </div>
                       </div>
                     </div>
+                    <button type="submit" className="btn btn-success">
+                      Submit
+                    </button>
                     {/* /.card-body */}
-                    <div className="card-footer">
-                      <button type="submit" className="btn btn-success">
-                        Submit
-                      </button>
-                    </div>
                   </form>
+
+                  {/* 7ot lena el code */}
                 </div>
-                {/* /.card */}
+                {/* /.card-body */}
+
+                {/* /.card-footer*/}
               </div>
+
+              {/* mena zedt */}
             </div>
           </div>
         </section>

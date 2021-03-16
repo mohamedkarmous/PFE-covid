@@ -34,19 +34,19 @@ const patientsPage = () => {
                   <div className="card">
                     <div className="card-header">
                       <h3 className="card-title">Patients data</h3>
-                    </div>
-                    {/* /.card-header */}
-                    <div className="card-body">
                       <Link
                         className="btn btn-primary"
                         to="/addPatient"
                         style={{
                           width: "150px",
                           marginLeft: "85%",
-                          marginTop: "1%",
+                          marginTop: "-3%",
                         }}>
                         Add Patient
                       </Link>
+                    </div>
+                    {/* /.card-header */}
+                    <div className="card-body">
                       <PatientTable />
                     </div>
                     {/* /.card-body */}
