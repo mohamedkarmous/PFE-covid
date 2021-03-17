@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import patient, account
+from .models import patient, account, patient_test
 from django.contrib.auth.models import User
 import base64
 
@@ -11,6 +11,13 @@ class PatientSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'patient_picture', 'date_added',
                   'city', 'governorate', 'sex', 'age', 'account', 'date_of_birth', 'covid19']
         #fields = '__all__'
+
+
+class TestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = patient_test
+
+        fields = '__all__'
 
 
 class AccountSeriaizer(serializers.ModelSerializer):

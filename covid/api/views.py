@@ -1,7 +1,7 @@
 from django.db.models.query import QuerySet
 from django.shortcuts import render
-from .serializer import AccountSeriaizer, PatientSerializer, AccountPropertiesSerializer, UserPropertiesSerializer
-from .models import patient, account
+from .serializer import AccountSeriaizer, PatientSerializer, AccountPropertiesSerializer, UserPropertiesSerializer, TestSerializer
+from .models import patient, account, patient_test
 #from rest_framework.parsers import FormParser,MultiPartParser,JSONParser
 # import
 from django.contrib.auth.models import User
@@ -29,8 +29,8 @@ CREATE_SUCCESS = 'created'
 ############## patient api ###################
 
 
-@permission_classes((IsAuthenticated,))
 @api_view(['GET', ])
+@permission_classes((IsAuthenticated,))
 def patient_details(request, pk):
     try:
         patient_data = patient.objects.get(id=pk)
@@ -42,6 +42,7 @@ def patient_details(request, pk):
 
 
 @api_view(['PUT', ])
+@permission_classes((IsAuthenticated, ))
 def update_patient(request, pk):
 
     try:
@@ -62,6 +63,7 @@ def update_patient(request, pk):
 
 
 @api_view(['DELETE', ])
+@permission_classes((IsAuthenticated, ))
 def delete_patient(request, pk):
 
     try:
@@ -78,6 +80,7 @@ def delete_patient(request, pk):
 
 
 @api_view(['POST'])
+@permission_classes((IsAuthenticated, ))
 def create_patient(request):
 
     if request.method == 'POST':
@@ -91,6 +94,7 @@ def create_patient(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@permission_classes((IsAuthenticated, ))
 class view_patient(ListAPIView):
     queryset = patient.objects.all()
     serializer_class = PatientSerializer
@@ -206,6 +210,7 @@ def update_account_view(request):
 
 
 @api_view(['DELETE', ])
+@permission_classes((IsAuthenticated, ))
 def delete_account(request, pk):
 
     try:
@@ -223,3 +228,84 @@ def delete_account(request, pk):
         if operation:
             data[SUCCESS] = DELETE_SUCCESS
         return Response(data=data)
+
+
+############## patient_test api ###################
+
+
+@api_view(['GET', ])
+@permission_classes((IsAuthenticated,))
+def test_details(request, pk):
+    try:
+        test_data = patient_test.objects.get(id=pk)
+
+    except patient_test.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        return Response(TestSerializer(test_data).data)
+
+
+@api_view(['PUT', ])
+@permission_classes((IsAuthenticated, ))
+def update_test(request, pk):
+
+    try:
+        test_data = patient_test.objects.get(id=pk)
+    except patient_test.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = TestSerializer(test_data, data=request.data)
+        data = {}
+        if serializer.is_valid():
+            serializer.save()
+
+            data[SUCCESS] = UPDATE_SUCCESS
+            return Response(data=data)
+        # print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE', ])
+@permission_classes((IsAuthenticated, ))
+def delete_test(request, pk):
+
+    try:
+        test_data = patient_test.objects.get(id=pk)
+    except patient_test.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'DELETE':
+        operation = test_data.delete()
+        data = {}
+        if operation:
+            data[SUCCESS] = DELETE_SUCCESS
+        return Response(data=data)
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated, ))
+def create_test(request):
+
+    if request.method == 'POST':
+        serializer = TestSerializer(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes((IsAuthenticated,))
+class view_test(ListAPIView):
+    queryset = patient_test.objects.all()
+    serializer_class = TestSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+   # pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('patient',)
+
+    ##################################

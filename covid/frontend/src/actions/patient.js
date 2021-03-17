@@ -8,6 +8,8 @@ import {
   DELETE_PATIENTS,
   ADD_PATIENT,
   UPDATE_PATIENT,
+  SENDTEST,
+  TEST_ERROR,
 } from "./types";
 import { Link, Redirect } from "react-router-dom";
 

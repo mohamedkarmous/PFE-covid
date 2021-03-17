@@ -17,3 +17,7 @@ export const GET_PATIENTS = "GET_PATIENTS";
 export const DELETE_PATIENTS = "DELETE_PATIENTS";
 export const ADD_PATIENT = "ADD_PATIENT";
 export const UPDATE_PATIENT = "UPDATE_PATIENT";
+
+//tests
+export const SENDTEST = "SENDTEST";
+export const TEST_ERROR = "TEST_ERROR";
