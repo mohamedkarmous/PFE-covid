@@ -77,6 +77,7 @@ class patient_test(models.Model):
     date_added = models.DateTimeField(
         verbose_name="date_added", default=timezone.now)
     validated = models.BooleanField(default=False)
+    result = models.CharField(max_length=30, default="")
     patient = models.ForeignKey(patient, on_delete=models.CASCADE, default=1)
     account = models.ForeignKey(account, on_delete=models.CASCADE, default=21)
 
