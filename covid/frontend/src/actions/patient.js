@@ -8,15 +8,12 @@ import {
   DELETE_PATIENTS,
   ADD_PATIENT,
   UPDATE_PATIENT,
-  SENDTEST,
-  TEST_ERROR,
 } from "./types";
 import { Link, Redirect } from "react-router-dom";
 
 //get patients
 
 export const getPatients = (id = -1) => async (dispatch) => {
-  console.log(id);
   try {
     var res = {};
     if (id == -1) {

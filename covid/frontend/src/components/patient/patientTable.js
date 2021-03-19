@@ -7,10 +7,13 @@ import { Link, Redirect } from "react-router-dom";
 import DataTable, { createTheme } from "react-data-table-component";
 import { useHistory } from "react-router-dom";
 
+import Modal from "react-modal";
+
 //react grid table importation
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import ReactModal from "react-modal";
 
 const PatientTable = ({
   getPatients,

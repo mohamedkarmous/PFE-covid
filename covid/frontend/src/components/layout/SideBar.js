@@ -83,10 +83,7 @@ const SideBar = ({ auth: { isAuthenticated, loading, user } }) => {
                 <Link to="/AddPatient">
                   <a className="nav-link">
                     <i className="nav-icon far fa-calendar-alt" />
-                    <p>
-                      Add Patient
-                      <span className="badge badge-info right">2</span>
-                    </p>
+                    <p>Add Patient</p>
                   </a>
                 </Link>
               </li>

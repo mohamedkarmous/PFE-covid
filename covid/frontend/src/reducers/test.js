@@ -1,4 +1,10 @@
-import { SENDTEST, TEST_ERROR } from "../actions/types";
+import {
+  SENDTEST,
+  TEST_ERROR,
+  GET_TESTS,
+  DELETE_TEST,
+  UPDATE_TEST,
+} from "../actions/types";
 const initialState = {
   test: null,
   tests: [],
@@ -13,6 +19,23 @@ export default function (state = initialState, action) {
       return {
         ...state,
         test: payload,
+        loading: false,
+      };
+    case GET_TESTS:
+      return {
+        ...state,
+        tests: payload,
+        loading: false,
+      };
+    case UPDATE_TEST:
+      return {
+        ...state,
+        loading: false,
+      };
+    case DELETE_TEST:
+      return {
+        ...state,
+        tests: state.tests.filter((p) => p.id !== payload),
         loading: false,
       };
     case TEST_ERROR:

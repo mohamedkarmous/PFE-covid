@@ -21,3 +21,6 @@ export const UPDATE_PATIENT = "UPDATE_PATIENT";
 //tests
 export const SENDTEST = "SENDTEST";
 export const TEST_ERROR = "TEST_ERROR";
+export const GET_TESTS = "GET_TESTS";
+export const DELETE_TEST = "DELETE_TEST";
+export const UPDATE_TEST = "UPDATE_TEST";

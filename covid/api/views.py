@@ -306,6 +306,6 @@ class view_test(ListAPIView):
     permission_classes = (IsAuthenticated,)
    # pagination_class = PageNumberPagination
     filter_backends = (SearchFilter, OrderingFilter)
-    search_fields = ('patient',)
+    search_fields = ('patient__id',)
 
     ##################################

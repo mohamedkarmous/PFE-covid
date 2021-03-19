@@ -40,7 +40,7 @@ export default function (state = initialState, action) {
     case DELETE_PATIENTS:
       return {
         ...state,
-        posts: state.patients.filter((post) => post.id !== payload),
+        patients: state.patients.filter((p) => p.id !== payload),
         loading: false,
       };
     case PATIENT_ERROR:

@@ -4,18 +4,27 @@ import SideBar from "../layout/SideBar";
 import { useEffect } from "react";
 import { useState } from "react";
 import { update_patient } from "../../actions/patient";
-import { sendTest } from "../../actions/test";
+import { sendTest, getTests, deleteTest, updateTest } from "../../actions/test";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
+//react grid table importation
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+
 function UpdatePatient({
   auth: { user },
   patient: { patient, loading },
+  test: { tests },
   update_patient,
   sendTest,
+  getTests,
+  deleteTest,
+  updateTest,
 }) {
   let history = useHistory();
 
@@ -109,6 +118,7 @@ function UpdatePatient({
     set_selection_fields();
     set_date_max();
     set_form();
+    getTests(patient.id);
   }, [patient]);
 
   const [formData, setFormData] = useState({
@@ -197,7 +207,7 @@ function UpdatePatient({
     );
   };
   const loadPicture1 = (e) => {
-    Data1.append("file", imagetest.files[0]);
+    Data1.append("xray_image", imagetest.files[0]);
     document.getElementById("testname").innerHTML = String(
       imagetest.files[0].name
     );
@@ -208,8 +218,13 @@ function UpdatePatient({
   };
   const onSubmit1 = async (e) => {
     e.preventDefault();
+    Data1.append("patient", patient.id);
+    Data1.append("account", user.id);
     sendTest(Data1);
     document.getElementById("testname").innerHTML = String("");
+    setTimeout(() => {
+      getTests(patient.id);
+    }, 750);
   };
 
   const onSubmit = async (e) => {
@@ -229,6 +244,82 @@ function UpdatePatient({
     update_patient(Data, patient.id, history);
     document.getElementById("filename").innerHTML = String("");
   };
+  //table code
+
+  function remove(e, id) {
+    deleteTest(id.id);
+
+    setTimeout(() => {
+      getTests(patient.id);
+    }, 500);
+  }
+  function update(e, id) {
+    let d = new FormData();
+    if (id.validated == true) {
+      d.append("validated", false);
+    } else {
+      d.append("validated", true);
+    }
+
+    updateTest(d, id.id);
+    /*
+    setTimeout(() => {
+      getTests(tests.id);
+    }, 500);
+    */
+  }
+
+  const dynamicCellStyleCovid = (e) => {
+    if (e.value == "COVID") {
+      //mark police cells as red
+      return { backgroundColor: "#f08080" };
+    } else if (e.value == "NORMAL") {
+      //mark police cells as red
+      return { backgroundColor: "#90ee90" };
+    }
+  };
+  const onGridReady = (params) => {
+    setGridApi(params.api);
+    setGridColumnApi(params.columnApi.columnApi);
+  };
+
+  const updateButton = (props) => {
+    return (
+      <button
+        type="button"
+        class="btn btn-block btn-secondary"
+        style={{ width: "30px", borderRadius: "4px", height: "30px" }}
+        onClick={(e) => update(e, props.data)}>
+        <ion-icon style={{ "font-size": "20px" }} name="create"></ion-icon>
+      </button>
+    );
+  };
+  const deleteButton = (props) => {
+    return (
+      <button
+        type="button"
+        class="btn btn-block btn-secondary"
+        style={{ width: "30px", borderRadius: "4px", height: "30px" }}
+        onClick={(e) => remove(e, props.data)}>
+        <ion-icon
+          style={{ "font-size": "20px" }}
+          name="trash-outline"></ion-icon>
+      </button>
+    );
+  };
+
+  const xrayImage = (props) => {
+    const str = props.data.xray_image.replace(
+      "http://localhost:8000/api/test/frontend/public",
+      "."
+    );
+
+    return <img src={str} width="500" height="600"></img>;
+  };
+
+  const [rowData, setRowData] = useState(tests);
+  const [gridApi, setGridApi] = useState(null);
+  const [gridColumnApi, setGridColumnApi] = useState(null);
 
   return (
     <div>
@@ -474,17 +565,75 @@ function UpdatePatient({
                                 htmlFor="exampleInputFile"
                                 id="testname"></label>
                             </div>
+                            <button type="submit" className="btn btn-success">
+                              Send
+                            </button>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button type="submit" className="btn btn-success">
-                      Submit
-                    </button>
+
                     {/* /.card-body */}
                   </form>
+                  {/* 7ot lena el code end*/}
+                  {/* tests table */}
+                  <div
+                    className="ag-theme-alpine"
+                    style={{ height: 800, width: "100%" }}>
+                    <AgGridReact
+                      rowHeight={600}
+                      rowData={tests}
+                      //  onFirstDataRendered={onFirstDataRendered}
+                      onGridReady={onGridReady}
+                      sideBar={"filters"}
+                      // rowSelection="multiple"
+                      pagination={true}
+                      paginationPageSize={1}
+                      frameworkComponents={{
+                        update: updateButton,
+                        delete: deleteButton,
+                        xray: xrayImage,
+                      }}
+                      enableCharts={true}>
+                      <AgGridColumn
+                        headerName="Xray"
+                        cellRenderer="xray"
+                        width={550}></AgGridColumn>
+                      <AgGridColumn
+                        headerName="date added"
+                        field="date_added"
+                        sortable={true}
+                        filter={true}
+                        floatingFilter={true}
+                        width={200}></AgGridColumn>
+                      <AgGridColumn
+                        headerName="Result"
+                        field="result"
+                        sortable={true}
+                        filter={true}
+                        floatingFilter={true}
+                        cellStyle={(e) => dynamicCellStyleCovid(e)}
+                        width={100}></AgGridColumn>
+                      <AgGridColumn
+                        headerName="Validated"
+                        field="validated"
+                        sortable={true}
+                        filter={true}
+                        floatingFilter={true}
+                        cellStyle={(e) => dynamicCellStyleCovid(e)}
+                        width={120}></AgGridColumn>
+                      <AgGridColumn
+                        cellRenderer="update"
+                        width={50}
+                        colId="params"></AgGridColumn>
+                      <AgGridColumn
+                        cellRenderer="delete"
+                        width={50}
+                        colId="params"></AgGridColumn>
+                    </AgGridReact>
+                  </div>
 
-                  {/* 7ot lena el code */}
+                  {/* tests table end  */}
                 </div>
                 {/* /.card-body */}
 
@@ -503,6 +652,10 @@ UpdatePatient.protoTypes = {
   auth: PropTypes.object.isRequired,
   patient: PropTypes.object.isRequired,
   test: PropTypes.object.isRequired,
+  sendTest: PropTypes.func.isRequired,
+  getTests: PropTypes.func.isRequired,
+  deleteTest: PropTypes.func.isRequired,
+  updateTest: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
@@ -510,6 +663,10 @@ const mapStateToProps = (state) => ({
   test: state.test,
 });
 
-export default connect(mapStateToProps, { update_patient, sendTest })(
-  UpdatePatient
-);
+export default connect(mapStateToProps, {
+  update_patient,
+  sendTest,
+  getTests,
+  deleteTest,
+  updateTest,
+})(UpdatePatient);

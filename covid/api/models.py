@@ -74,8 +74,8 @@ class patient(models.Model):
 class patient_test(models.Model):
     xray_image = models.ImageField(upload_to=upload_location_test, height_field=None,
                                    width_field=None, default='./frontend/public/pictures/account/default.png')
-    date_added = models.DateTimeField(
-        verbose_name="date_added", default=timezone.now)
+    date_added = models.DateField(
+        verbose_name="date_added", auto_now=True)
     validated = models.BooleanField(default=False)
     result = models.CharField(max_length=30, default="")
     patient = models.ForeignKey(patient, on_delete=models.CASCADE, default=1)
