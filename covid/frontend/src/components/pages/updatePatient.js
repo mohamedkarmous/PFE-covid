@@ -33,7 +33,7 @@ function UpdatePatient({
       Tunis: [
         "Tunis",
         "Le Bardo",
-        "Le Kram	",
+        "Le Kram",
         "La Goulette",
         "Carthage",
         "Sidi Bou Said",
@@ -43,18 +43,18 @@ function UpdatePatient({
       Ariana: [
         "Ariana",
         "La Soukra",
-        "	Raoued",
+        "Raoued",
         "Kalâat el-Andalous",
         "Sidi Thabet",
         "Ettadhamen-Mnihla",
       ],
       "Ben Arous": [
-        "Ben Arous	",
+        "Ben Arous",
         "El Mourouj",
-        "Hammam Lif	",
-        "Hammam Chott	",
+        "Hammam Lif",
+        "Hammam Chott",
         "Bou Mhel el-Bassatine",
-        "Ezzahra	",
+        "Ezzahra",
         "Radès",
         "Mégrine",
         "Mohamedia-Fouchana",
@@ -115,11 +115,17 @@ function UpdatePatient({
   }
 
   useEffect(() => {
-    set_selection_fields();
-    set_date_max();
-    set_form();
-    getTests(patient.id);
+    setPage();
   }, [patient]);
+
+  function setPage() {
+    if (!loading) {
+      getTests(patient.id);
+      set_selection_fields();
+      set_date_max();
+      set_form();
+    }
+  }
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -155,6 +161,7 @@ function UpdatePatient({
     }
     */
     //to change when other countries added
+
     countySel.selectedIndex = 1;
     for (var state in stateObject["Tunisia"]) {
       stateSel.options[stateSel.options.length] = new Option(state, state);
@@ -224,7 +231,7 @@ function UpdatePatient({
     document.getElementById("testname").innerHTML = String("");
     setTimeout(() => {
       getTests(patient.id);
-    }, 750);
+    }, 1000);
   };
 
   const onSubmit = async (e) => {
@@ -260,21 +267,18 @@ function UpdatePatient({
     } else {
       d.append("validated", true);
     }
-
-    updateTest(d, id.id);
     /*
+    updateTest(d, id.id);
     setTimeout(() => {
       getTests(tests.id);
-    }, 500);
+    }, 750);
     */
   }
 
   const dynamicCellStyleCovid = (e) => {
     if (e.value == "COVID") {
-      //mark police cells as red
       return { backgroundColor: "#f08080" };
     } else if (e.value == "NORMAL") {
-      //mark police cells as red
       return { backgroundColor: "#90ee90" };
     }
   };
