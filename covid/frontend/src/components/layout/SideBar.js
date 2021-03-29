@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { logout } from "../../actions/auth";
 import { Link, Redirect } from "react-router-dom";
 
-const SideBar = ({ auth: { isAuthenticated, loading, user } }) => {
+const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   /*
   if (!isAuthenticated && !loading) {
     return <Redirect to="/login" />;
@@ -78,7 +79,19 @@ const SideBar = ({ auth: { isAuthenticated, loading, user } }) => {
          with font-awesome or any other icon font library */}
 
               <li className="nav-header">ROUTES</li>
-
+              <li className="nav-item">
+                <Link to="/">
+                  <a className="nav-link">
+                    <ion-icon
+                      name="home-outline"
+                      style={{
+                        fontSize: "20px",
+                        color: "white",
+                      }}></ion-icon>
+                    <p style={{ paddingLeft: "10px" }}>Home</p>
+                  </a>
+                </Link>
+              </li>
               <li className="nav-item">
                 <Link to="/patient">
                   <a className="nav-link">
@@ -106,6 +119,20 @@ const SideBar = ({ auth: { isAuthenticated, loading, user } }) => {
                   </a>
                 </Link>
               </li>
+              <li className="nav-item" onClick={logout}>
+                <a className="nav-link">
+                  <ion-icon
+                    name="log-out-outline"
+                    style={{
+                      fontSize: "20px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}></ion-icon>
+                  <p style={{ paddingLeft: "10px", cursor: "pointer" }}>
+                    Logout
+                  </p>
+                </a>
+              </li>
             </ul>
           </nav>
           {/* /.sidebar-menu */}
@@ -118,9 +145,10 @@ const SideBar = ({ auth: { isAuthenticated, loading, user } }) => {
 
 SideBar.protoTypes = {
   auth: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, {})(SideBar);
+export default connect(mapStateToProps, { logout })(SideBar);

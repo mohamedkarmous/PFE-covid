@@ -28,24 +28,30 @@ const PatientTable = ({
   }, []);
   let history = useHistory();
 
-  function remove(e, id) {
-    deletePatient(id.id);
-    setTimeout(() => {
-      getPatients(user.id);
-    }, 500);
-  }
-
   //react grid table
 
   const [rowData, setRowData] = useState(patients);
   const [gridApi, setGridApi] = useState(null);
   const [gridColumnApi, setGridColumnApi] = useState(null);
-  const [selected, setSelected] = useState(null);
+  var [selected, setSelected] = React.useState(null);
+
+  function setPatient() {}
+
+  function remove(e, id) {
+    setSelected((selected = id));
+    /*
+    //openModal();
+    //deletePatient(id.id);
+    setTimeout(() => {
+      getPatients(user.id);
+    }, 500);
+    */
+  }
 
   const onGridReady = (params) => {
     setGridApi(params.api);
     setGridColumnApi(params.columnApi.columnApi);
-    console.log(params.columnApi);
+
     /*
     var allColumnIds = [];
     gridColumnApi.getAllColumns().forEach(function (column) {
@@ -86,8 +92,8 @@ const PatientTable = ({
   const deleteButton = (props) => {
     return (
       <button
-        //  data-toggle="modal"
-        // data-target="#exampleModal"
+        data-toggle="modal"
+        data-target="#exampleModal"
         type="button"
         class="btn btn-block btn-secondary"
         style={{ width: "30px", borderRadius: "4px", height: "30px" }}
@@ -100,6 +106,7 @@ const PatientTable = ({
   };
 
   //////modal
+
   var subtitle;
   const [modalIsOpen, setIsOpen] = React.useState(false);
   function openModal() {
@@ -113,6 +120,10 @@ const PatientTable = ({
 
   function closeModal() {
     setIsOpen(false);
+  }
+
+  function confirmDelete() {
+    deletePatient(selected.id);
   }
 
   return (
@@ -191,45 +202,52 @@ const PatientTable = ({
 
       {/* modal code  */}
 
-      {/* modal code  */}
-      <Modal
-        isOpen={modalIsOpen}
-        //onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        contentLabel="Example Modal"
-        style={{ overlay: { display: null } }}>
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-content bg-danger">
-              <div class="modal-header">
-                <h4 class="modal-title">Danger Modal</h4>
-                <button
-                  type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <p>One fine body…</p>
-              </div>
-              <div class="modal-footer justify-content-between">
-                <button
-                  onClick={closeModal}
-                  type="button"
-                  class="btn btn-outline-light"
-                  data-dismiss="modal">
-                  Close
-                </button>
-                <button type="button" class="btn btn-outline-light">
-                  Save changes
-                </button>
+      <div>
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-content bg-danger">
+                <div class="modal-header">
+                  <h4 class="modal-title">Delete confirmation</h4>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure ? </p>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button
+                    data-dismiss="modal"
+                    type="button"
+                    class="btn btn-outline-light"
+                    data-dismiss="modal">
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-light"
+                    onClick={confirmDelete}
+                    data-dismiss="modal">
+                    Yes delete this patient
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </Modal>
+      </div>
+      {/* modal code  */}
     </div>
   );
 };

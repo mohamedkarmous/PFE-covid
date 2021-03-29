@@ -30,7 +30,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div class="wrapper">
+        <div id="main" class="wrapper">
           <div>
             <Alert />
           </div>
