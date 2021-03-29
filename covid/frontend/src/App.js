@@ -1,9 +1,7 @@
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
-import Navbar from "./components/layout/Navbar";
-import SideBar from "./components/layout/SideBar";
-import Dashboard from "./components/layout/Dashboard";
-import Footer from "./components/layout/Footer";
+import ModalTest from "./components/layout/modal";
+
 import mainPage from "./components/pages/mainPage";
 import AddPatient from "./components/pages/addPatient";
 import UpdatePatient from "./components/pages/updatePatient";
@@ -46,12 +44,7 @@ function App() {
               path="/updatePatient"
               component={UpdatePatient}
             />
-            <PrivateRoute
-              exact
-              path="/updatePatient"
-              component={updatePatient}
-            />
-
+            <Route exact path="/modal" component={ModalTest} />
             <Route exact path="/login" component={SignIn} />
             <Route exact path="/" component={SignIn} />
             <Route exact path="/register" component={SignUp} />

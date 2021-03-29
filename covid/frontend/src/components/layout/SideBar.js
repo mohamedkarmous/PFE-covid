@@ -80,27 +80,31 @@ const SideBar = ({ auth: { isAuthenticated, loading, user } }) => {
               <li className="nav-header">ROUTES</li>
 
               <li className="nav-item">
-                <Link to="/AddPatient">
+                <Link to="/patient">
                   <a className="nav-link">
-                    <i className="nav-icon far fa-calendar-alt" />
-                    <p>Add Patient</p>
+                    <ion-icon
+                      name="list-outline"
+                      style={{
+                        fontSize: "20px",
+                        color: "white",
+                      }}></ion-icon>
+                    <p style={{ paddingLeft: "10px" }}>Patient Table</p>
                   </a>
                 </Link>
               </li>
 
               <li className="nav-item">
-                <Link to="/patient">
+                <Link to="/AddPatient">
                   <a className="nav-link">
-                    <i className="nav-icon far fa-image" />
-                    <p>Patient Table</p>
+                    <ion-icon
+                      name="add-circle-outline"
+                      style={{
+                        fontSize: "20px",
+                        color: "white",
+                      }}></ion-icon>
+                    <p style={{ paddingLeft: "10px" }}>Add Patient</p>
                   </a>
                 </Link>
-              </li>
-              <li className="nav-item">
-                <a href="pages/kanban.html" className="nav-link">
-                  <i className="nav-icon fas fa-columns" />
-                  <p>Kanban Board</p>
-                </a>
               </li>
             </ul>
           </nav>

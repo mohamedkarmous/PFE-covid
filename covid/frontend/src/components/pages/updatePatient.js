@@ -229,9 +229,10 @@ function UpdatePatient({
     Data1.append("account", user.id);
     sendTest(Data1);
     document.getElementById("testname").innerHTML = String("");
+
     setTimeout(() => {
       getTests(patient.id);
-    }, 1000);
+    }, 750);
   };
 
   const onSubmit = async (e) => {
@@ -267,12 +268,11 @@ function UpdatePatient({
     } else {
       d.append("validated", true);
     }
-    /*
+
     updateTest(d, id.id);
     setTimeout(() => {
       getTests(tests.id);
     }, 750);
-    */
   }
 
   const dynamicCellStyleCovid = (e) => {

@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { getPatients, deletePatient, getPatient } from "../../actions/patient";
 import { loadUser } from "../../actions/auth";
 import { Link, Redirect } from "react-router-dom";
-import DataTable, { createTheme } from "react-data-table-component";
 import { useHistory } from "react-router-dom";
 
 import Modal from "react-modal";
@@ -23,7 +22,9 @@ const PatientTable = ({
   auth: { user },
 }) => {
   useEffect(() => {
-    getPatients(user.id);
+    if (user) {
+      getPatients(user.id);
+    }
   }, []);
   let history = useHistory();
 
@@ -39,6 +40,7 @@ const PatientTable = ({
   const [rowData, setRowData] = useState(patients);
   const [gridApi, setGridApi] = useState(null);
   const [gridColumnApi, setGridColumnApi] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   const onGridReady = (params) => {
     setGridApi(params.api);
@@ -67,19 +69,7 @@ const PatientTable = ({
       return null;
     }
   };
-  const onFirstDataRendered = (params) => {
-    var createRangeChartParams = {
-      cellRange: {
-        rowStartIndex: 0,
-        rowEndIndex: 79,
-        columns: ["age", "covid19"],
-      },
-      chartType: "groupedColumn",
-      chartContainer: document.querySelector("#myChart"),
-      aggFunc: "sum",
-    };
-    params.api.createRangeChart(createRangeChartParams);
-  };
+
   const updateButton = (props) => {
     return (
       <Link
@@ -96,6 +86,8 @@ const PatientTable = ({
   const deleteButton = (props) => {
     return (
       <button
+        //  data-toggle="modal"
+        // data-target="#exampleModal"
         type="button"
         class="btn btn-block btn-secondary"
         style={{ width: "30px", borderRadius: "4px", height: "30px" }}
@@ -107,12 +99,27 @@ const PatientTable = ({
     );
   };
 
+  //////modal
+  var subtitle;
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    subtitle.style.color = "#f00";
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   return (
     <div>
       <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
         <AgGridReact
           rowData={patients}
-          onFirstDataRendered={onFirstDataRendered}
           onGridReady={onGridReady}
           sideBar={"filters"}
           // rowSelection="multiple"
@@ -170,7 +177,7 @@ const PatientTable = ({
             sortable={true}
             filter={true}
             floatingFilter={true}
-            width={130}></AgGridColumn>
+            width={150}></AgGridColumn>
           <AgGridColumn
             cellRenderer="update"
             width={50}
@@ -181,6 +188,48 @@ const PatientTable = ({
             colId="params"></AgGridColumn>
         </AgGridReact>
       </div>
+
+      {/* modal code  */}
+
+      {/* modal code  */}
+      <Modal
+        isOpen={modalIsOpen}
+        //onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        contentLabel="Example Modal"
+        style={{ overlay: { display: null } }}>
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-content bg-danger">
+              <div class="modal-header">
+                <h4 class="modal-title">Danger Modal</h4>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>One fine body…</p>
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button
+                  onClick={closeModal}
+                  type="button"
+                  class="btn btn-outline-light"
+                  data-dismiss="modal">
+                  Close
+                </button>
+                <button type="button" class="btn btn-outline-light">
+                  Save changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

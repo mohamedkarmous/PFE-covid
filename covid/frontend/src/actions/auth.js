@@ -75,7 +75,7 @@ export const register = ({
       for (let key in errors) {
         i = i + 500;
 
-        dispatch(setAlert(errors[key][0], "danger", i));
+        dispatch(setAlert(errors[key][0] + " :" + key, "danger", i));
       }
     }
     dispatch({
