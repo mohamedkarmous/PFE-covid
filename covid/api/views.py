@@ -207,6 +207,37 @@ def update_account_view(request):
             data['response'] = 'Account update success'
             return Response(data=data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# update accounts for admin
+
+
+@api_view(['PUT', ])
+@permission_classes((IsAuthenticated, ))
+def update_accounts_view(request, pk):
+
+    try:
+        user = User.objects.get(id=pk)
+        account_data = account.objects.get(id=pk)
+
+    except account.DoesNotExist:
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = AccountPropertiesSerializer(
+            account_data, data=request.data)
+        serializer1 = UserPropertiesSerializer(user, data=request.data)
+        data = {}
+        if serializer.is_valid():
+            if serializer1.is_valid():
+
+                serializer.save()
+                serializer1.save()
+            else:
+                return Response(serializer1.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            data['response'] = 'Account update success'
+            return Response(data=data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['DELETE', ])
@@ -228,6 +259,19 @@ def delete_account(request, pk):
         if operation:
             data[SUCCESS] = DELETE_SUCCESS
         return Response(data=data)
+
+
+@permission_classes((IsAuthenticated,))
+class view_account(ListAPIView):
+    queryset = account.objects.all()
+    serializer_class = AccountPropertiesSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+   # pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('email',)
+
+    ##################################
 
 
 ############## patient_test api ###################

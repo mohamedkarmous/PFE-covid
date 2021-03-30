@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import patient_details, create_patient, update_patient, delete_patient, view_patient  # patient views
 from .views import test_details, create_test, update_test, delete_test, view_test  # test views
-from .views import registration_view, account_properties_view, update_account_view, delete_account, token  # user view
+from .views import registration_view, account_properties_view, update_account_view, delete_account, token, view_account, update_accounts_view  # user view
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
@@ -19,8 +19,11 @@ urlpatterns = [
     path('login', obtain_auth_token, name='login'),
     path('account', account_properties_view, name='account'),
     path('account/update', update_account_view, name='update account'),
+    path('account/<pk>/update', update_accounts_view, name='update accounts'),
     path('account/<pk>/delete', delete_account, name='delete account'),
     path('account/token', token, name='token'),
+    path('accounts', view_account.as_view(), name='accounts'),
+
 
     ### test url ###
     path('test/', view_test.as_view(), name='list'),
