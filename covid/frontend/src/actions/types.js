@@ -24,3 +24,12 @@ export const TEST_ERROR = "TEST_ERROR";
 export const GET_TESTS = "GET_TESTS";
 export const DELETE_TEST = "DELETE_TEST";
 export const UPDATE_TEST = "UPDATE_TEST";
+
+//users
+
+export const USERS_ERROR = "USERS_ERROR";
+export const GET_USERS = "GET_USERS";
+export const DELETE_USERS = "DELETE_USERS";
+export const ADD_USER = "ADD_USER";
+export const UPDATE_USER = "UPDATE_USER";
+export const GET_USER = "GET_USER";

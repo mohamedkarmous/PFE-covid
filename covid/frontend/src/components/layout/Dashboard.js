@@ -16,9 +16,15 @@ const Dashboard = ({
   auth: { user },
 }) => {
   useEffect(() => {
-    getPatients(user.id);
-    getTests();
+    setDash();
   }, []);
+
+  const setDash = (async) => {
+    if (!loading) {
+      getPatients(user.id);
+      getTests();
+    }
+  };
 
   //charts data preparation
   const makeSexData = () => {

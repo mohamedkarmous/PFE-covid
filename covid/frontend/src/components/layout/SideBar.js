@@ -21,6 +21,95 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
     firstName = user.first_name;
     LastName = user.last_name;
   }
+  const notActivated = (
+    <div>
+      <li className="nav-item">
+        <Link>
+          <a className="nav-link">
+            <ion-icon
+              name="lock-closed-outline"
+              style={{
+                fontSize: "20px",
+                color: "red",
+              }}></ion-icon>
+            <p style={{ paddingLeft: "10px", color: "red" }}>
+              Account not active
+            </p>
+          </a>
+        </Link>
+      </li>
+    </div>
+  );
+  const doctorLinks = (
+    <div>
+      <li className="nav-header">
+        <ion-icon
+          style={{
+            fontSize: "20px",
+            color: "white",
+          }}
+          name="medkit-outline"></ion-icon>
+        {"  "}Doctor routes
+      </li>
+      <li className="nav-item">
+        <Link to="/">
+          <a className="nav-link">
+            <ion-icon
+              name="home-outline"
+              style={{
+                fontSize: "20px",
+                color: "white",
+              }}></ion-icon>
+            <p style={{ paddingLeft: "10px" }}>Home</p>
+          </a>
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link to="/patient">
+          <a className="nav-link">
+            <ion-icon
+              name="list-outline"
+              style={{
+                fontSize: "20px",
+                color: "white",
+              }}></ion-icon>
+            <p style={{ paddingLeft: "10px" }}>Patient Table</p>
+          </a>
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link to="/AddPatient">
+          <a className="nav-link">
+            <ion-icon
+              name="add-circle-outline"
+              style={{
+                fontSize: "20px",
+                color: "white",
+              }}></ion-icon>
+            <p style={{ paddingLeft: "10px" }}>Add Patient</p>
+          </a>
+        </Link>
+      </li>
+    </div>
+  );
+
+  const adminLinks = (
+    <div>
+      <li className="nav-item">
+        <Link to="/users">
+          <a className="nav-link">
+            <ion-icon
+              name="add-circle-outline"
+              style={{
+                fontSize: "20px",
+                color: "white",
+              }}></ion-icon>
+            <p style={{ paddingLeft: "10px" }}>Users table</p>
+          </a>
+        </Link>
+      </li>
+    </div>
+  );
 
   return (
     <div>
@@ -35,6 +124,7 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
           />
           <span className="brand-text font-weight-light">COVID 19</span>
         </a>
+
         {/* Sidebar */}
         <div className="sidebar">
           {/* Sidebar user panel (optional) */}
@@ -79,46 +169,11 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
          with font-awesome or any other icon font library */}
 
               <li className="nav-header">ROUTES</li>
-              <li className="nav-item">
-                <Link to="/">
-                  <a className="nav-link">
-                    <ion-icon
-                      name="home-outline"
-                      style={{
-                        fontSize: "20px",
-                        color: "white",
-                      }}></ion-icon>
-                    <p style={{ paddingLeft: "10px" }}>Home</p>
-                  </a>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/patient">
-                  <a className="nav-link">
-                    <ion-icon
-                      name="list-outline"
-                      style={{
-                        fontSize: "20px",
-                        color: "white",
-                      }}></ion-icon>
-                    <p style={{ paddingLeft: "10px" }}>Patient Table</p>
-                  </a>
-                </Link>
-              </li>
+              {!loading && (user.is_doctor ? doctorLinks : null)}
+              {!loading && (user.is_admin ? adminLinks : null)}
+              {!loading &&
+                (!user.is_admin && !user.is_doctor ? notActivated : null)}
 
-              <li className="nav-item">
-                <Link to="/AddPatient">
-                  <a className="nav-link">
-                    <ion-icon
-                      name="add-circle-outline"
-                      style={{
-                        fontSize: "20px",
-                        color: "white",
-                      }}></ion-icon>
-                    <p style={{ paddingLeft: "10px" }}>Add Patient</p>
-                  </a>
-                </Link>
-              </li>
               <li className="nav-item" onClick={logout}>
                 <a className="nav-link">
                   <ion-icon

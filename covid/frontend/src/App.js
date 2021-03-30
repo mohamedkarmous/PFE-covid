@@ -6,6 +6,7 @@ import mainPage from "./components/pages/mainPage";
 import AddPatient from "./components/pages/addPatient";
 import UpdatePatient from "./components/pages/updatePatient";
 import patientsPage from "./components/pages/patientsPage";
+import userPage from "./components/pages/usersPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Alert from "./components/layout/alert";
 import { loadUser } from "./actions/auth";
@@ -39,6 +40,7 @@ function App() {
             <PrivateRoute exact path="/dashboard" component={mainPage} />
             <PrivateRoute exact path="/addPatient" component={AddPatient} />
             <PrivateRoute exact path="/patient" component={patientsPage} />
+            <PrivateRoute exact path="/users" component={userPage} />
             <PrivateRoute
               exact
               path="/updatePatient"
