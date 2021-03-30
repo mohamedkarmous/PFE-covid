@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import Navbar from "../layout/Navbar";
-import SideBar from "../layout/SideBar";
-import UsersTable from "../users/usersTable";
+import Navbar from "../../layout/Navbar";
+import SideBar from "../../layout/SideBar";
+import UsersTable from "../../users/usersTable";
 import { Link, Redirect } from "react-router-dom";
-import Footer from "../layout/Footer";
+import Footer from "../../layout/Footer";
 
 const usersPage = () => {
   return (

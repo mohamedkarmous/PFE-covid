@@ -16,15 +16,23 @@ const UsersTable = ({
   getUsers,
   getUser,
   deleteUser,
-  users: { users, loading },
-  auth: { user },
+  users: { users },
+  auth: { user, loading },
 }) => {
   useEffect(() => {
-    getUsers();
-  }, []);
+    testAdmin();
+  }, [loading]);
   let history = useHistory();
 
   //react grid table
+  const testAdmin = (async) => {
+    if (!loading) {
+      if (!user.is_admin) {
+        history.push("/");
+      }
+      getUsers();
+    }
+  };
 
   const [rowData, setRowData] = useState(users);
   const [gridApi, setGridApi] = useState(null);
@@ -69,7 +77,7 @@ const UsersTable = ({
   const updateButton = (props) => {
     return (
       <Link
-        to="/updatePatient"
+        to="/updateUser"
         class="btn btn-block btn-secondary"
         style={{ width: "30px", borderRadius: "4px", height: "30px" }}
         onClick={(e) => {
@@ -113,14 +121,14 @@ const UsersTable = ({
   }
 
   function confirmDelete() {
-    // deletePatient(selected.id);
+    deleteUser(selected.id);
   }
 
   return (
     <div>
       <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
         <AgGridReact
-          rowData={users}
+          rowData={users.filter((p) => p.id !== user.id)}
           onGridReady={onGridReady}
           // rowSelection="multiple"
           pagination={true}
@@ -223,7 +231,7 @@ const UsersTable = ({
                     class="btn btn-outline-light"
                     onClick={confirmDelete}
                     data-dismiss="modal">
-                    Yes delete this patient
+                    Yes delete this user
                   </button>
                 </div>
               </div>

@@ -3,10 +3,11 @@ import SignUp from "./components/auth/SignUp";
 import ModalTest from "./components/layout/modal";
 
 import mainPage from "./components/pages/mainPage";
-import AddPatient from "./components/pages/addPatient";
-import UpdatePatient from "./components/pages/updatePatient";
-import patientsPage from "./components/pages/patientsPage";
-import userPage from "./components/pages/usersPage";
+import AddPatient from "./components/pages/patient/addPatient";
+import UpdatePatient from "./components/pages/patient/updatePatient";
+import UpdateUser from "./components/pages/admin/updateUser";
+import patientsPage from "./components/pages/patient/patientsPage";
+import userPage from "./components/pages/admin/usersPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Alert from "./components/layout/alert";
 import { loadUser } from "./actions/auth";
@@ -17,7 +18,6 @@ import PrivateRoute from "./components/routing/PrivateRoute";
 
 import { Provider } from "react-redux";
 import store from "./store";
-import updatePatient from "./components/pages/updatePatient";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -46,6 +46,7 @@ function App() {
               path="/updatePatient"
               component={UpdatePatient}
             />
+            <PrivateRoute exact path="/updateUser" component={UpdateUser} />
             <Route exact path="/modal" component={ModalTest} />
             <Route exact path="/login" component={SignIn} />
             <Route exact path="/" component={SignIn} />

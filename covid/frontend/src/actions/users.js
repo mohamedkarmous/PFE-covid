@@ -39,13 +39,13 @@ export const getUser = (user_data) => async (dispatch) => {
   }
 };
 
-//delete patient
+//delete user
 
 export const deleteUser = (id) => async (dispatch) => {
   try {
     var res = {};
 
-    res = await axios.delete(`/api/account/${id}/delete/`);
+    res = await axios.delete(`/api/account/${id}/delete`);
 
     dispatch({ type: DELETE_USERS, payload: id });
     //dispatch(setAlert("Post Removed", "success"));
@@ -57,7 +57,7 @@ export const deleteUser = (id) => async (dispatch) => {
   }
 };
 
-//add patient
+//add user
 export const add_user = (data, history) => async (dispatch) => {
   const config = {
     headers: {
@@ -83,14 +83,14 @@ export const add_user = (data, history) => async (dispatch) => {
   }
 };
 
-//update patient
+//update user
 export const update_user = (data, id, history) => async (dispatch) => {
   const config = {
     headers: {
       "Content-type": "multipart/form-data",
     },
   };
-  const link = "/api/account/" + id + "/update/";
+  const link = "/api/account/" + id + "/update";
   try {
     const res = await axios.put(link, data, config);
 
@@ -98,7 +98,7 @@ export const update_user = (data, id, history) => async (dispatch) => {
       type: UPDATE_USER,
       payload: res.data,
     });
-    history.push("/");
+    history.push("/users");
   } catch (error) {
     const errors = error.response.data.errors;
 

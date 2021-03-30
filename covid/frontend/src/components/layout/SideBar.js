@@ -21,6 +21,7 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
     firstName = user.first_name;
     LastName = user.last_name;
   }
+
   const notActivated = (
     <div>
       <li className="nav-item">
@@ -30,10 +31,10 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
               name="lock-closed-outline"
               style={{
                 fontSize: "20px",
-                color: "red",
+                color: "yellow",
               }}></ion-icon>
-            <p style={{ paddingLeft: "10px", color: "red" }}>
-              Account not active
+            <p style={{ paddingLeft: "10px", color: "yellow" }}>
+              <b>Account not active</b>
             </p>
           </a>
         </Link>
@@ -48,8 +49,9 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
             fontSize: "20px",
             color: "white",
           }}
-          name="medkit-outline"></ion-icon>
-        {"  "}Doctor routes
+          name="medkit"></ion-icon>
+        {"   "}
+        <b>Doctor routes</b>
       </li>
       <li className="nav-item">
         <Link to="/">
@@ -95,11 +97,21 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
 
   const adminLinks = (
     <div>
+      <li className="nav-header">
+        <ion-icon
+          style={{
+            fontSize: "20px",
+            color: "white",
+          }}
+          name="person"></ion-icon>
+        {"  "}
+        <b>Admin routes</b>
+      </li>
       <li className="nav-item">
         <Link to="/users">
           <a className="nav-link">
             <ion-icon
-              name="add-circle-outline"
+              name="people-outline"
               style={{
                 fontSize: "20px",
                 color: "white",
@@ -169,8 +181,9 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
          with font-awesome or any other icon font library */}
 
               <li className="nav-header">ROUTES</li>
-              {!loading && (user.is_doctor ? doctorLinks : null)}
               {!loading && (user.is_admin ? adminLinks : null)}
+              {!loading && (user.is_doctor ? doctorLinks : null)}
+
               {!loading &&
                 (!user.is_admin && !user.is_doctor ? notActivated : null)}
 
@@ -180,11 +193,16 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
                     name="log-out-outline"
                     style={{
                       fontSize: "20px",
-                      color: "white",
+                      color: "red",
                       cursor: "pointer",
                     }}></ion-icon>
-                  <p style={{ paddingLeft: "10px", cursor: "pointer" }}>
-                    Logout
+                  <p
+                    style={{
+                      paddingLeft: "10px",
+                      cursor: "pointer",
+                      color: "red",
+                    }}>
+                    <b>Logout</b>
                   </p>
                 </a>
               </li>

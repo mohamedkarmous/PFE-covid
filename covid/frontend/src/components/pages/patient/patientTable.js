@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getPatients, deletePatient, getPatient } from "../../actions/patient";
-import { loadUser } from "../../actions/auth";
+import {
+  getPatients,
+  deletePatient,
+  getPatient,
+} from "../../../actions/patient";
 import { Link, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
