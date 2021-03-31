@@ -49,11 +49,10 @@ export default function (state = initialState, action) {
       };
 
     case REMOVE_ALERT:
-      localStorage.removeItem("token");
       return {
         ...state,
-        token: null,
-        isAuthenticated: false,
+        // token: null,
+        // isAuthenticated: false,
         loading: false,
       };
 

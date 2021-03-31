@@ -100,7 +100,6 @@ export const login = (username, password) => async (dispatch) => {
 
   try {
     const res = await axios.post("/api/login", body, config);
-
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,
@@ -108,6 +107,7 @@ export const login = (username, password) => async (dispatch) => {
     dispatch(loadUser());
   } catch (error) {
     dispatch(setAlert("Wrong username or password!", "danger", 2000));
+
     const errors = error.response.data.errors;
     if (errors) {
       let i = 4000;
@@ -117,6 +117,7 @@ export const login = (username, password) => async (dispatch) => {
         dispatch(setAlert(errors[key][0], "danger", i));
       }
     }
+
     dispatch({
       type: LOGIN_FAIL,
     });

@@ -48,7 +48,7 @@ export const deleteUser = (id) => async (dispatch) => {
     res = await axios.delete(`/api/account/${id}/delete`);
 
     dispatch({ type: DELETE_USERS, payload: id });
-    //dispatch(setAlert("Post Removed", "success"));
+    dispatch(setAlert("User Removed", "success"));
   } catch (err) {
     dispatch({
       type: USERS_ERROR,
@@ -71,9 +71,21 @@ export const add_user = (data, history) => async (dispatch) => {
       type: ADD_USER,
       payload: res.data,
     });
+    dispatch(setAlert("User added", "success"));
     history.push("/");
   } catch (error) {
-    const errors = error.response.data.errors;
+    if (error) {
+      const errors = error.response.data;
+      console.log(errors);
+      if (errors.errors) {
+        let i = 4000;
+        for (let key in errors.errors) {
+          i = i + 500;
+
+          dispatch(setAlert(errors.errors[key] + " :" + key, "danger", i));
+        }
+      }
+    }
 
     dispatch({
       type: USERS_ERROR,
@@ -98,9 +110,18 @@ export const update_user = (data, id, history) => async (dispatch) => {
       type: UPDATE_USER,
       payload: res.data,
     });
+    dispatch(setAlert("User updated", "success"));
     history.push("/users");
   } catch (error) {
-    const errors = error.response.data.errors;
+    const errors = error.response.data;
+    if (errors) {
+      let i = 4000;
+      for (let key in errors) {
+        i = i + 500;
+
+        dispatch(setAlert(errors[key][0] + " :" + key, "danger", i));
+      }
+    }
 
     dispatch({
       type: USERS_ERROR,

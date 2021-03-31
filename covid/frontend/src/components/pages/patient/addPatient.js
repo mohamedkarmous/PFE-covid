@@ -360,9 +360,17 @@ function AddPatient({ auth: { loading, user }, add_patient }) {
   useEffect(() => {
     set_selection_fields();
     set_date_max();
-  }, []);
+    testDoctor();
+  }, [loading]);
   let history = useHistory();
 
+  const testDoctor = (async) => {
+    if (!loading) {
+      if (!user.is_doctor) {
+        history.push("/");
+      }
+    }
+  };
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",

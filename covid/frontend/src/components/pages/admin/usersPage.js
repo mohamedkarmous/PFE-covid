@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "../../layout/Navbar";
 import SideBar from "../../layout/SideBar";
-import UsersTable from "../../users/usersTable";
+import UsersTable from "./usersTable";
 import { Link, Redirect } from "react-router-dom";
 import Footer from "../../layout/Footer";
 
@@ -36,13 +36,13 @@ const usersPage = () => {
                       <h3 className="card-title">Users data</h3>
                       <Link
                         className="btn btn-primary"
-                        to="/"
+                        to="/addUser"
                         style={{
                           width: "150px",
                           marginLeft: "85%",
                           marginTop: "-3%",
                         }}>
-                        Add Doctor
+                        Add User
                       </Link>
                     </div>
                     {/* /.card-header */}

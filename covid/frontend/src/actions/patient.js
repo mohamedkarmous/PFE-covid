@@ -51,7 +51,7 @@ export const deletePatient = (id) => async (dispatch) => {
     res = await axios.delete(`/api/patient/${id}/delete/`);
 
     dispatch({ type: DELETE_PATIENTS, payload: id });
-    //dispatch(setAlert("Post Removed", "success"));
+    dispatch(setAlert("Patient Removed", "success"));
   } catch (err) {
     dispatch({
       type: PATIENT_ERROR,
@@ -75,8 +75,17 @@ export const add_patient = (data, history) => async (dispatch) => {
       payload: res.data,
     });
     history.push("/patient");
+    dispatch(setAlert("Patient added", "success"));
   } catch (error) {
-    const errors = error.response.data.errors;
+    const errors = error.response.data;
+    if (errors) {
+      let i = 4000;
+      for (let key in errors) {
+        i = i + 500;
+
+        dispatch(setAlert(errors[key][0] + " :" + key, "danger", i));
+      }
+    }
 
     dispatch({
       type: PATIENT_ERROR,
@@ -100,9 +109,18 @@ export const update_patient = (data, id, history) => async (dispatch) => {
       type: UPDATE_PATIENT,
       payload: res.data,
     });
+    dispatch(setAlert("Patient updated", "success"));
     history.push("/patient");
   } catch (error) {
-    const errors = error.response.data.errors;
+    const errors = error.response.data;
+    if (errors) {
+      let i = 4000;
+      for (let key in errors) {
+        i = i + 500;
+
+        dispatch(setAlert(errors[key][0] + " :" + key, "danger", i));
+      }
+    }
 
     dispatch({
       type: PATIENT_ERROR,

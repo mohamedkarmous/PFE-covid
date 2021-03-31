@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getUsers, getUser, deleteUser } from "../../actions/users";
+import { getUsers, getUser, deleteUser } from "../../../actions/users";
 import { Link, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
@@ -24,7 +24,6 @@ const UsersTable = ({
   }, [loading]);
   let history = useHistory();
 
-  //react grid table
   const testAdmin = (async) => {
     if (!loading) {
       if (!user.is_admin) {

@@ -12,7 +12,7 @@ const Alert = ({ alerts }) =>
           <div key={alert.id}>
             <button
               type="button"
-              class="btn btn-success"
+              class="btn btn-success btn-lg"
               data-toggle="modal"
               data-target="#modal-danger"
               style={{ "text-align": "center", width: "100%" }}>
@@ -26,7 +26,7 @@ const Alert = ({ alerts }) =>
           <div key={alert.id}>
             <button
               type="button"
-              class="btn btn-danger"
+              class="btn btn-danger btn"
               data-toggle="modal"
               data-target="#modal-danger"
               style={{ "text-align": "center", width: "100%" }}>

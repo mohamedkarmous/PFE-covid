@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Navbar from "../layout/Navbar";
 import SideBar from "../layout/SideBar";
-import addPatient from "./patient/addPatient";
 import Dashboard from "../layout/Dashboard";
 import Footer from "../layout/Footer";
 

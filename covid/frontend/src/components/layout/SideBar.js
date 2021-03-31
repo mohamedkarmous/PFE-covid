@@ -5,21 +5,23 @@ import { logout } from "../../actions/auth";
 import { Link, Redirect } from "react-router-dom";
 
 const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
-  /*
   if (!isAuthenticated && !loading) {
     return <Redirect to="/login" />;
   }
-  */
 
   var profileImage = "";
   var firstName = "";
   var LastName = "";
+  var is_doctor = false;
+  var is_admin = false;
   if (user !== null) {
     profileImage = user.account_picture
       .replace("frontend/public", ".")
       .replace("./frontend/public", ".");
     firstName = user.first_name;
     LastName = user.last_name;
+    is_doctor = user.is_doctor;
+    is_admin = user.is_admin;
   }
 
   const notActivated = (
@@ -108,6 +110,19 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
         <b>Admin routes</b>
       </li>
       <li className="nav-item">
+        <Link to="/admin">
+          <a className="nav-link">
+            <ion-icon
+              name="bar-chart-outline"
+              style={{
+                fontSize: "20px",
+                color: "white",
+              }}></ion-icon>
+            <p style={{ paddingLeft: "10px" }}>Admin Dashboard</p>
+          </a>
+        </Link>
+      </li>
+      <li className="nav-item">
         <Link to="/users">
           <a className="nav-link">
             <ion-icon
@@ -117,6 +132,19 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
                 color: "white",
               }}></ion-icon>
             <p style={{ paddingLeft: "10px" }}>Users table</p>
+          </a>
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link to="/addUser">
+          <a className="nav-link">
+            <ion-icon
+              name="person-add-outline"
+              style={{
+                fontSize: "20px",
+                color: "white",
+              }}></ion-icon>
+            <p style={{ paddingLeft: "10px" }}>Add user</p>
           </a>
         </Link>
       </li>
@@ -181,11 +209,10 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
          with font-awesome or any other icon font library */}
 
               <li className="nav-header">ROUTES</li>
-              {!loading && (user.is_admin ? adminLinks : null)}
-              {!loading && (user.is_doctor ? doctorLinks : null)}
+              {!loading && (is_admin ? adminLinks : null)}
+              {!loading && (is_doctor ? doctorLinks : null)}
 
-              {!loading &&
-                (!user.is_admin && !user.is_doctor ? notActivated : null)}
+              {!loading && (!is_admin && !is_doctor ? notActivated : null)}
 
               <li className="nav-item" onClick={logout}>
                 <a className="nav-link">

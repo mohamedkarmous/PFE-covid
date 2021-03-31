@@ -10,13 +10,13 @@ const DoctorRoute = ({
 }) => (
   <Route
     {...rest}
-    render={(props) =>
-      !isAuthenticated && !loading && !user.is_doctor ? (
+    render={(props) => {
+      !loading && !user.is_doctor ? (
         <Redirect to="/" />
       ) : (
         <Component {...props} />
-      )
-    }
+      );
+    }}
   />
 );
 

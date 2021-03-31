@@ -25,11 +25,20 @@ const PatientTable = ({
   auth: { user },
 }) => {
   useEffect(() => {
+    testDoctor();
+  }, [user]);
+  let history = useHistory();
+
+  const testDoctor = (async) => {
     if (user) {
+      console.log(" test moch doctor");
+      if (!user.is_doctor) {
+        console.log("moch doctor");
+        history.push("/");
+      }
       getPatients(user.id);
     }
-  }, []);
-  let history = useHistory();
+  };
 
   //react grid table
 

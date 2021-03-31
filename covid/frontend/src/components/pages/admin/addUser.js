@@ -3,29 +3,31 @@ import Navbar from "../../layout/Navbar";
 import SideBar from "../../layout/SideBar";
 import { useEffect } from "react";
 import { useState } from "react";
-import { update_user } from "../../../actions/users";
+import { add_user } from "../../../actions/users";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import setAlert from "../../layout/alert";
 
-function UpdateUser({
-  auth: { loading },
-  users: { user },
+function AddUser({
+  auth: { loading, user },
 
-  update_user,
+  add_user,
 }) {
   let history = useHistory();
 
   useEffect(() => {
-    setPage();
+    testAdmin();
   }, []);
 
-  function setPage() {
+  const testAdmin = (async) => {
     if (!loading) {
-      set_form();
+      if (!user.is_admin) {
+        history.push("/");
+      }
     }
-  }
+  };
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -36,61 +38,9 @@ function UpdateUser({
     username: "",
     is_doctor: "",
     is_admin: "",
+    password: "",
+    password2: "",
   });
-
-  const set_form = () => {
-    setFormData({
-      firstname: loading ? "" : user.first_name,
-      lastname: loading ? "" : user.last_name,
-      username: loading ? "" : user.username,
-      email: loading ? "" : user.email,
-      is_admin: loading ? "" : user.is_admin,
-      is_doctor: loading ? "" : user.is_doctor,
-    });
-
-    var countySel = document.getElementById("countySel"),
-      stateSel = document.getElementById("stateSel"),
-      districtSel = document.getElementById("districtSel");
-    /*
-    var opts = countySel.options;
-    for (var opt, j = 0; opt = opts[j]; j++) {
-      if (opt.value == val) {
-        countySel.selectedIndex = j;
-        break;
-      }
-    }
-    */
-    //to change when other countries added
-    /*
-    countySel.selectedIndex = 1;
-    for (var state in stateObject["Tunisia"]) {
-      stateSel.options[stateSel.options.length] = new Option(state, state);
-    }
-
-    var opts = stateSel.options;
-    for (var opt, j = 0; (opt = opts[j]); j++) {
-      if (opt.value == user.city) {
-        stateSel.selectedIndex = j;
-        break;
-      }
-    }
-    var district = stateObject[countySel.value][user.city];
-    for (var i = 0; i < district.length; i++) {
-      districtSel.options[districtSel.options.length] = new Option(
-        district[i],
-        district[i]
-      );
-    } //////////end of code to change
-
-    var opts = districtSel.options;
-    for (var opt, j = 0; (opt = opts[j]); j++) {
-      if (opt.value == user.governorate) {
-        districtSel.selectedIndex = j;
-        break;
-      }
-    }
-    */
-  };
 
   const {
     firstname,
@@ -99,6 +49,8 @@ function UpdateUser({
     email,
     is_admin,
     is_doctor,
+    password,
+    password2,
   } = formData;
   var Data = new FormData();
 
@@ -124,9 +76,10 @@ function UpdateUser({
     Data.append("username", formData.username);
     Data.append("is_admin", formData.is_admin);
     Data.append("is_doctor", formData.is_doctor);
-    console.log(formData);
+    Data.append("password", formData.password);
+    Data.append("password2", formData.password2);
 
-    update_user(Data, user.id, history);
+    add_user(Data, user.id, history);
     document.getElementById("filename").innerHTML = String("");
   };
 
@@ -142,14 +95,15 @@ function UpdateUser({
               {/* left column */}
 
               {/* mena zedt*/}
-              <div className="card" style={{ width: "100%" }}>
+              <div className="card card-secondary" style={{ width: "100%" }}>
                 <div
                   className="card-header"
-                  style={{ backgroundColor: "#28a745" }}>
+                  style={{ backgroundColor: "#007bff" }}>
                   <h3 className="card-title" style={{ color: "white" }}>
-                    Update User{" "}
+                    Add User{" "}
                   </h3>
-                  <div className="card-tools">
+
+                  {/*<div className="card-tools">
                     <button
                       type="button"
                       className="btn btn-tool"
@@ -157,7 +111,7 @@ function UpdateUser({
                       title="Collapse">
                       <i className="fas fa-minus" />
                     </button>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="card-body" style={{ display: "block" }}>
                   {/* 7ot lena el code  */}
@@ -200,6 +154,34 @@ function UpdateUser({
                             placeholder="Username"
                             name="username"
                             value={username}
+                            onChange={(e) => onChange(e)}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="exampleInputName">Password</label>
+                        <div className="col-6">
+                          <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => onChange(e)}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="exampleInputName">
+                          Confirm password
+                        </label>
+                        <div className="col-6">
+                          <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Confrirm Password"
+                            name="password2"
+                            value={password2}
                             onChange={(e) => onChange(e)}
                           />
                         </div>
@@ -261,16 +243,7 @@ function UpdateUser({
                         <label htmlFor="exampleInputFile">
                           Account Picture :
                         </label>
-                        <div className="col-10">
-                          <img
-                            src={user.account_picture.replace(
-                              "http://localhost:8000/api/frontend/public",
-                              "."
-                            )}
-                            width="600"
-                            height="500"
-                          />
-                        </div>
+
                         <div className="col-10">
                           <div className="input-group">
                             <div className="custom-file">
@@ -289,8 +262,8 @@ function UpdateUser({
                         </div>
                       </div>
                     </div>
-                    <button type="submit" className="btn btn-success">
-                      Submit
+                    <button type="submit" className="btn btn-primary">
+                      Add user
                     </button>
                     {/* /.card-body */}
                   </form>
@@ -308,10 +281,10 @@ function UpdateUser({
     </div>
   );
 }
-UpdateUser.protoTypes = {
-  update_user: PropTypes.func.isRequired,
+AddUser.protoTypes = {
   auth: PropTypes.object.isRequired,
   users: PropTypes.object.isRequired,
+  add_user: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
@@ -319,5 +292,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  update_user,
-})(UpdateUser);
+  add_user,
+})(AddUser);

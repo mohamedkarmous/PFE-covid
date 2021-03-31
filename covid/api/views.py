@@ -137,21 +137,26 @@ def registration_view(request):
         serializer = AccountSeriaizer(data=request.data)
         data = {}
         if serializer.is_valid():
-            user = User.objects.create_user(
-                request.data['username'], request.data['email'], request.data['password'])
-            account = serializer.save(user.id)
-            data['response'] = 'successfully registered new user.'
-            data['email'] = account.email
-            data['username'] = account.username
-            data['first_name'] = account.first_name
-            data['last_name'] = account.last_name
-            #data['account_picture'] = account.account_picture
+            if(request.data['password'] == request.data['password2']):
 
-            #data['is_admin'] = account.is_admin
-            #data['is_doctor'] = account.is_doctor
+                user = User.objects.create_user(
+                    request.data['username'], request.data['email'], request.data['password'])
+                account = serializer.save(user.id)
+                data['response'] = 'successfully registered new user.'
+                data['email'] = account.email
+                data['username'] = account.username
+                data['first_name'] = account.first_name
+                data['last_name'] = account.last_name
+                #data['account_picture'] = account.account_picture
 
-            token = Token.objects.get(user=user).key
-            data['token'] = token
+                #data['is_admin'] = account.is_admin
+                #data['is_doctor'] = account.is_doctor
+
+                token = Token.objects.get(user=user).key
+                data['token'] = token
+            else:
+                data = {'errors': {'password': 'Passwords must match.'}}
+                return Response(data, status=status.HTTP_400_BAD_REQUEST)
         else:
             data = {'errors': serializer.errors}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)

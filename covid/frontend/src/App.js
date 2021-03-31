@@ -1,11 +1,11 @@
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
-import ModalTest from "./components/layout/modal";
 
 import mainPage from "./components/pages/mainPage";
 import AddPatient from "./components/pages/patient/addPatient";
 import UpdatePatient from "./components/pages/patient/updatePatient";
 import UpdateUser from "./components/pages/admin/updateUser";
+import AdminDashboard from "./components/pages/admin/AdminDashboard";
 import patientsPage from "./components/pages/patient/patientsPage";
 import userPage from "./components/pages/admin/usersPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -14,6 +14,8 @@ import { loadUser } from "./actions/auth";
 import setAuthToken from "./utils/setAuthToken";
 import { useEffect } from "react";
 import PrivateRoute from "./components/routing/PrivateRoute";
+import DoctorRoute from "./components/routing/DoctorRoute";
+import AddUser from "./components/pages/admin/addUser";
 //redux
 
 import { Provider } from "react-redux";
@@ -41,13 +43,14 @@ function App() {
             <PrivateRoute exact path="/addPatient" component={AddPatient} />
             <PrivateRoute exact path="/patient" component={patientsPage} />
             <PrivateRoute exact path="/users" component={userPage} />
+            <PrivateRoute exact path="/admin" component={AdminDashboard} />
+            <PrivateRoute exact path="/addUser" component={AddUser} />
             <PrivateRoute
               exact
               path="/updatePatient"
               component={UpdatePatient}
             />
             <PrivateRoute exact path="/updateUser" component={UpdateUser} />
-            <Route exact path="/modal" component={ModalTest} />
             <Route exact path="/login" component={SignIn} />
             <Route exact path="/" component={SignIn} />
             <Route exact path="/register" component={SignUp} />
