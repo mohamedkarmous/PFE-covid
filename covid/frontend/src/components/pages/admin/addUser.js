@@ -79,7 +79,7 @@ function AddUser({
     Data.append("password", formData.password);
     Data.append("password2", formData.password2);
 
-    add_user(Data, user.id, history);
+    add_user(Data, history);
     document.getElementById("filename").innerHTML = String("");
   };
 

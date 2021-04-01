@@ -71,10 +71,11 @@ export const add_user = (data, history) => async (dispatch) => {
       type: ADD_USER,
       payload: res.data,
     });
+
     dispatch(setAlert("User added", "success"));
-    history.push("/");
+    history.push("/users");
   } catch (error) {
-    if (error) {
+    if (error.response) {
       const errors = error.response.data;
       console.log(errors);
       if (errors.errors) {
