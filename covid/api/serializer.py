@@ -2,7 +2,17 @@ from django.db.models import fields
 from rest_framework import serializers
 from .models import patient, account, patient_test
 from django.contrib.auth.models import User
-import base64
+from django.contrib.auth.models import User
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    model = User
+
+    """
+    Serializer for password change endpoint.
+    """
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
 
 
 class PatientSerializer(serializers.ModelSerializer):

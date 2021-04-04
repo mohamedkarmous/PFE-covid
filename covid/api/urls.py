@@ -1,8 +1,9 @@
 from django.urls import path
 from .views import patient_details, create_patient, update_patient, delete_patient, view_patient  # patient views
 from .views import test_details, create_test, update_test, delete_test, view_test  # test views
-from .views import registration_view, account_properties_view, update_account_view, delete_account, token, view_account, update_accounts_view  # user view
+from .views import registration_view, account_properties_view, update_account_view, delete_account, token, view_account, update_accounts_view, ChangePasswordView  # user view
 from rest_framework.authtoken.views import obtain_auth_token
+
 
 urlpatterns = [
     ### patient url ###
@@ -23,6 +24,8 @@ urlpatterns = [
     path('account/<pk>/delete', delete_account, name='delete account'),
     path('account/token', token, name='token'),
     path('accounts', view_account.as_view(), name='accounts'),
+    path('change_Password', ChangePasswordView.as_view(), name='change password'),
+
 
 
     ### test url ###
