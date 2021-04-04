@@ -14,12 +14,15 @@ import { loadUser } from "./actions/auth";
 import setAuthToken from "./utils/setAuthToken";
 import { useEffect } from "react";
 import PrivateRoute from "./components/routing/PrivateRoute";
-import DoctorRoute from "./components/routing/DoctorRoute";
+
 import AddUser from "./components/pages/admin/addUser";
+
 //redux
 
 import { Provider } from "react-redux";
 import store from "./store";
+import allTests from "./components/pages/admin/allTests";
+import AllPatients from "./components/pages/admin/AllPatients";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -45,6 +48,9 @@ function App() {
             <PrivateRoute exact path="/users" component={userPage} />
             <PrivateRoute exact path="/admin" component={AdminDashboard} />
             <PrivateRoute exact path="/addUser" component={AddUser} />
+            <PrivateRoute exact path="/allTests" component={allTests} />
+            <PrivateRoute exact path="/allPatients" component={AllPatients} />
+
             <PrivateRoute
               exact
               path="/updatePatient"

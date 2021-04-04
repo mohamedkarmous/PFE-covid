@@ -148,6 +148,32 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
           </a>
         </Link>
       </li>
+      <li className="nav-item">
+        <Link to="/allPatients">
+          <a className="nav-link">
+            <ion-icon
+              name="list-outline"
+              style={{
+                fontSize: "20px",
+                color: "white",
+              }}></ion-icon>
+            <p style={{ paddingLeft: "10px" }}>All Patient Table</p>
+          </a>
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link to="/allTests">
+          <a className="nav-link">
+            <ion-icon
+              name="git-network-outline"
+              style={{
+                fontSize: "20px",
+                color: "white",
+              }}></ion-icon>
+            <p style={{ paddingLeft: "10px" }}>Tests table</p>
+          </a>
+        </Link>
+      </li>
     </div>
   );
 

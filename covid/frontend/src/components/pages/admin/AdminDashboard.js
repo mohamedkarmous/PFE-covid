@@ -102,6 +102,17 @@ const AdminDashboard = ({
   };
   const InfectedCity = makeInfectedCity();
 
+  const age = makeAgeData();
+
+  const makeCovidData = () => {
+    var result = patients.reduce(
+      (acc, o) => ((acc[o.covid19] = (acc[o.covid19] || 0) + 1), acc),
+      {}
+    );
+    return result;
+  };
+  const covid = makeCovidData();
+  /////////////////////////////////map data/////////////////////////////////////////
   const makeMapData = () => {
     let list = [];
 
@@ -118,17 +129,6 @@ const AdminDashboard = ({
     return list;
   };
 
-  const age = makeAgeData();
-
-  const makeCovidData = () => {
-    var result = patients.reduce(
-      (acc, o) => ((acc[o.covid19] = (acc[o.covid19] || 0) + 1), acc),
-      {}
-    );
-    return result;
-  };
-  const covid = makeCovidData();
-  /////////////////////////////////map data/////////////////////////////////////////
   const geolocateControlStyle = {
     right: 5,
     top: 5,
@@ -195,6 +195,7 @@ const AdminDashboard = ({
       "circle-stroke-color": "#fff",
     },
   };
+  ////////////////maap code ends //////////////////////////////////////////////////////////////
 
   return (
     <div>
@@ -230,23 +231,23 @@ const AdminDashboard = ({
             <div className="container-fluid">
               {/* Small boxes (Stat box) */}
               <div className="row">
-                <div className="col-lg-3 col-6">
+                <div className="col-lg-4 col-6">
                   {/* small box */}
                   <div className="small-box bg-warning">
                     <div className="inner">
                       <h3>{patients.length}</h3>
-                      <p>Patient Registrations</p>
+                      <p>Patients </p>
                     </div>
                     <div className="icon">
                       <i className="ion ion-person-add" />
                     </div>
-                    <Link to="/patient" className="small-box-footer">
+                    <Link to="/allPatients" className="small-box-footer">
                       More info <i className="fas fa-arrow-circle-right" />
                     </Link>
                   </div>
                 </div>
                 {/* ./col */}
-                <div className="col-lg-3 col-6">
+                <div className="col-lg-4 col-6">
                   {/* small box */}
                   <div className="small-box bg-info">
                     <div className="inner">
@@ -259,40 +260,23 @@ const AdminDashboard = ({
                   </div>
                 </div>
                 {/* ./col */}
-                <div className="col-lg-3 col-6">
+                <div className="col-lg-4 col-6">
                   {/* small box */}
                   <div className="small-box bg-success">
                     <div className="inner">
-                      <h3>
-                        20<sup style={{ fontSize: 20 }}>%</sup>
-                      </h3>
-                      <p>Recovered</p>
+                      <h3>{tests.length}</h3>
+                      <p>Xray-images</p>
                     </div>
                     <div className="icon">
                       <i className="ion ion-stats-bars" />
                     </div>
-                    <a href="#" className="small-box-footer">
+                    <Link to="/allTests" className="small-box-footer">
                       More info <i className="fas fa-arrow-circle-right" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 {/* ./col */}
 
-                <div className="col-lg-3 col-6">
-                  {/* small box */}
-                  <div className="small-box bg-danger">
-                    <div className="inner">
-                      <h3>1</h3>
-                      <p>Infected</p>
-                    </div>
-                    <div className="icon">
-                      <i className="ion ion-pie-graph" />
-                    </div>
-                    <a href="#" className="small-box-footer">
-                      More info <i className="fas fa-arrow-circle-right" />
-                    </a>
-                  </div>
-                </div>
                 {/* ./col */}
               </div>
               {/* /.row */}

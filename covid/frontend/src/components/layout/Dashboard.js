@@ -22,7 +22,7 @@ const Dashboard = ({
   const setDash = (async) => {
     if (!loading) {
       getPatients(user.id);
-      getTests();
+      getTests(user.id);
     }
   };
 

@@ -140,7 +140,7 @@ const PatientTable = ({
 
   return (
     <div>
-      <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
+      <div className="ag-theme-alpine" style={{ height: 550, width: "100%" }}>
         <AgGridReact
           rowData={patients}
           onGridReady={onGridReady}
@@ -181,7 +181,7 @@ const PatientTable = ({
             field="sex"
             sortable={true}
             filter={true}
-            width={80}></AgGridColumn>
+            width={90}></AgGridColumn>
           <AgGridColumn
             field="covid19"
             sortable={true}

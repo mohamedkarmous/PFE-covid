@@ -542,10 +542,12 @@ function UpdatePatient({
   }
 
   const dynamicCellStyleCovid = (e) => {
-    if (e.value == "COVID") {
+    if (e.value[0] == "C") {
       return { backgroundColor: "#f08080" };
-    } else if (e.value == "NORMAL") {
+    } else if (e.value[0] == "N") {
       return { backgroundColor: "#90ee90" };
+    } else if (e.value[0] == "P") {
+      return { backgroundColor: "#fad1d1" };
     }
   };
   const onGridReady = (params) => {
@@ -738,8 +740,8 @@ function UpdatePatient({
                               name="sex"
                               value={sex}
                               onChange={(e) => onChange(e)}>
-                              <option value="male">Male</option>
-                              <option value="female">Female</option>
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
                             </select>
                           </div>
                         </div>
@@ -886,7 +888,7 @@ function UpdatePatient({
                         sortable={true}
                         filter={true}
                         floatingFilter={true}
-                        width={200}></AgGridColumn>
+                        width={150}></AgGridColumn>
                       <AgGridColumn
                         headerName="Result"
                         field="result"
@@ -894,7 +896,7 @@ function UpdatePatient({
                         filter={true}
                         floatingFilter={true}
                         cellStyle={(e) => dynamicCellStyleCovid(e)}
-                        width={100}></AgGridColumn>
+                        width={175}></AgGridColumn>
                       <AgGridColumn
                         headerName="Validated"
                         field="validated"

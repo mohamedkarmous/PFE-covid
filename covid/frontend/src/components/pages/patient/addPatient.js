@@ -364,7 +364,7 @@ function AddPatient({ auth: { loading, user }, add_patient }) {
   }, [loading]);
   let history = useHistory();
 
-  const testDoctor = (async) => {
+  const testDoctor = () => {
     if (!loading) {
       if (!user.is_doctor) {
         history.push("/");
@@ -557,8 +557,8 @@ function AddPatient({ auth: { loading, user }, add_patient }) {
                               name="sex"
                               value={sex}
                               onChange={(e) => onChange(e)}>
-                              <option value="male">Male</option>
-                              <option value="female">Female</option>
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
                             </select>
                           </div>
                         </div>

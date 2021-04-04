@@ -34,8 +34,8 @@ def upload_location_account(instance, filename, **kwargs):
 class account(models.Model):
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(max_length=30, unique=True)
-    first_name = models.CharField(max_length=30, unique=True, default='')
-    last_name = models.CharField(max_length=30, unique=True, default='')
+    first_name = models.CharField(max_length=30, unique=False, default='')
+    last_name = models.CharField(max_length=30, unique=False, default='')
     account_picture = models.ImageField('', upload_to=upload_location_account, height_field=None,
                                         width_field=None, default='./frontend/public/pictures/account/default.png')
     is_admin = models.BooleanField(default=False)
