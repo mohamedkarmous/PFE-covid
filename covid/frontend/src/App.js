@@ -23,6 +23,11 @@ import { Provider } from "react-redux";
 import store from "./store";
 import allTests from "./components/pages/admin/allTests";
 import AllPatients from "./components/pages/admin/AllPatients";
+import profile from "./components/pages/profile";
+
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -31,6 +36,7 @@ if (localStorage.token) {
 function App() {
   useEffect(() => {
     store.dispatch(loadUser());
+    toast.configure();
   }, []);
 
   return (
@@ -46,6 +52,7 @@ function App() {
             <PrivateRoute exact path="/addPatient" component={AddPatient} />
             <PrivateRoute exact path="/patient" component={patientsPage} />
             <PrivateRoute exact path="/users" component={userPage} />
+            <PrivateRoute exact path="/profile" component={profile} />
             <PrivateRoute exact path="/admin" component={AdminDashboard} />
             <PrivateRoute exact path="/addUser" component={AddUser} />
             <PrivateRoute exact path="/allTests" component={allTests} />

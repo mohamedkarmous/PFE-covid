@@ -8,6 +8,7 @@ import {
   DELETE_USERS,
   ADD_USER,
   UPDATE_USER,
+  PASSWORD_CHANGED,
 } from "./types";
 import { Link, Redirect } from "react-router-dom";
 
@@ -112,8 +113,47 @@ export const update_user = (data, id, history) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(setAlert("User updated", "success"));
-    history.push("/users");
+    //history.push("/users");
   } catch (error) {
+    const errors = error.response.data;
+    if (errors) {
+      let i = 4000;
+      for (let key in errors) {
+        i = i + 500;
+
+        dispatch(setAlert(errors[key][0] + " :" + key, "danger", i));
+      }
+    }
+
+    dispatch({
+      type: USERS_ERROR,
+      payload: error,
+    });
+  }
+};
+
+export const changePassword = (data, history) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-type": "multipart/form-data",
+    },
+  };
+  const link = "/api/change_Password";
+  try {
+    if (data.new_password === data.new_password2) {
+      const res = await axios.put(link, data, config);
+
+      dispatch({
+        type: PASSWORD_CHANGED,
+        payload: res.data,
+      });
+      dispatch(setAlert("Password changed", "success"));
+      //history.push("/users");}
+    } else {
+      dispatch(setAlert("Passwords must match", "danger"));
+    }
+  } catch (error) {
+    console.log(error);
     const errors = error.response.data;
     if (errors) {
       let i = 4000;

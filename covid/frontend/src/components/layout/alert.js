@@ -1,6 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
+toast.configure();
 
 const Alert = ({ alerts }) =>
   alerts !== null &&
@@ -8,49 +12,23 @@ const Alert = ({ alerts }) =>
   alerts.map((alert) => {
     switch (alert.alertType) {
       case "success":
-        return (
-          <div key={alert.id}>
-            <button
-              type="button"
-              class="btn btn-success btn-lg"
-              data-toggle="modal"
-              data-target="#modal-danger"
-              style={{ "text-align": "center", width: "100%" }}>
-              {alert.msg}
-            </button>
-          </div>
-        );
+        toast.success(alert.msg, {
+          toastId: alert.id,
+        });
+        break;
 
       case "danger":
-        return (
-          <div key={alert.id}>
-            <button
-              type="button"
-              class="btn btn-danger btn"
-              data-toggle="modal"
-              data-target="#modal-danger"
-              style={{ "text-align": "center", width: "100%" }}>
-              {alert.msg}
-            </button>
-          </div>
-        );
+        toast.error(alert.msg, {
+          toastId: alert.id,
+        });
+        break;
 
       default:
-        return (
-          <div key={alert.id}>
-            <button
-              type="button"
-              class="btn btn-danger"
-              data-toggle="modal"
-              data-target="#modal-danger"
-              style={{ "text-align": "center", width: "100%" }}>
-              {alert.msg}
-            </button>
-          </div>
-        );
+        break;
     }
   });
 
+/////////////////////////////////////////////////////////
 Alert.propTypes = {
   alerts: PropTypes.array.isRequired,
 };

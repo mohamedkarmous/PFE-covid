@@ -110,6 +110,7 @@ export const update_patient = (data, id, history) => async (dispatch) => {
       payload: res.data,
     });
     dispatch(setAlert("Patient updated", "success"));
+
     history.push("/patient");
   } catch (error) {
     const errors = error.response.data;

@@ -24,7 +24,7 @@ const UsersTable = ({
   }, [loading]);
   let history = useHistory();
 
-  const testAdmin = (async) => {
+  const testAdmin = () => {
     if (!loading) {
       if (!user.is_admin) {
         history.push("/");

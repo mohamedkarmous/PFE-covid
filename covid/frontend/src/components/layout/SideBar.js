@@ -3,11 +3,20 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
 import { Link, Redirect } from "react-router-dom";
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 
 const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
-  if (!isAuthenticated && !loading) {
-    return <Redirect to="/login" />;
-  }
+  let history = useHistory();
+  useEffect(() => {
+    testAuth();
+  }, [user]);
+
+  const testAuth = () => {
+    if (!isAuthenticated && !loading) {
+      history.push("/login");
+    }
+  };
 
   var profileImage = "";
   var firstName = "";
@@ -203,9 +212,9 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
               />
             </div>
             <div className="info">
-              <a href="#" className="d-block">
+              <Link to="/profile" className="d-block">
                 {firstName} {LastName}
-              </a>
+              </Link>
             </div>
           </div>
           {/* SidebarSearch Form */}

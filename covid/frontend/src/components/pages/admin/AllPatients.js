@@ -77,15 +77,15 @@ const AllPatients = ({
   };
 
   const dynamicCellStyleCovid = (e) => {
-    if (e.value == "Infected") {
-      //mark police cells as red
+    if (e.value == "Covid19") {
       return { backgroundColor: "#f08080" };
     } else if (e.value == "Not infected") {
-      //mark police cells as red
       return { backgroundColor: "#90ee90" };
-    } else if (e.value == "Recovered") {
-      //mark police cells as red
+    } else if (e.value == "Pneumonia") {
       return { backgroundColor: "#ffa07a" };
+    } else if (e.value == "Recovered") {
+      return { backgroundColor: "#e6e600" };
+
       return null;
     }
   };

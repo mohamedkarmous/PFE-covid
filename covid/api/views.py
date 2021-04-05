@@ -247,6 +247,7 @@ class ChangePasswordView(UpdateAPIView):
             }
 
             return Response(response)
+        print(serializer.errors)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

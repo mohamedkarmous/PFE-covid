@@ -1,46 +1,57 @@
 import React, { Component } from "react";
-import Navbar from "../../layout/Navbar";
-import SideBar from "../../layout/SideBar";
+import Navbar from "./../layout/Navbar";
+import SideBar from "./../layout/SideBar";
 import { useEffect } from "react";
 import { useState } from "react";
-import { add_user } from "../../../actions/users";
+import { update_user } from "./../../actions/users";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import setAlert from "../../layout/alert";
+import { loadUser } from "../../actions/auth";
+import { changePassword } from "../../actions/users";
 
-function AddUser({
+function Profile({
   auth: { loading, user },
 
-  add_user,
+  update_user,
+  changePassword,
+  loadUser,
 }) {
   let history = useHistory();
 
   useEffect(() => {
-    testAdmin();
-  }, [loading]);
+    setPage();
+  }, []);
 
-  const testAdmin = () => {
-    if (user) {
-      if (!user.is_admin) {
-        history.push("/");
-      }
+  function setPage() {
+    if (!loading) {
+      set_form();
     }
-  };
+  }
 
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
     email: "",
+    oldpass: "",
     password: "",
     password2: "",
     username: "",
     is_doctor: "",
     is_admin: "",
-    password: "",
-    password2: "",
   });
+
+  const set_form = () => {
+    setFormData({
+      firstname: loading ? "" : user.first_name,
+      lastname: loading ? "" : user.last_name,
+      username: loading ? "" : user.username,
+      email: loading ? "" : user.email,
+      is_admin: loading ? "" : user.is_admin,
+      is_doctor: loading ? "" : user.is_doctor,
+    });
+  };
 
   const {
     firstname,
@@ -51,8 +62,11 @@ function AddUser({
     is_doctor,
     password,
     password2,
+    oldpass,
   } = formData;
   var Data = new FormData();
+
+  var Data1 = new FormData();
 
   var imagefile = document.querySelector("#file");
 
@@ -76,11 +90,22 @@ function AddUser({
     Data.append("username", formData.username);
     Data.append("is_admin", formData.is_admin);
     Data.append("is_doctor", formData.is_doctor);
-    Data.append("password", formData.password);
-    Data.append("password2", formData.password2);
 
-    add_user(Data, history);
+    update_user(Data, user.id, history);
+    setTimeout(() => {
+      loadUser();
+    }, 750);
     document.getElementById("filename").innerHTML = String("");
+  };
+
+  const onSubmit1 = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    Data1.append("old_password", formData.oldpass);
+    Data1.append("new_password", formData.password);
+    Data1.append("new_password2", formData.password2);
+
+    changePassword(Data1, history);
   };
 
   return (
@@ -95,15 +120,14 @@ function AddUser({
               {/* left column */}
 
               {/* mena zedt*/}
-              <div className="card card-secondary" style={{ width: "100%" }}>
+              <div className="card" style={{ width: "100%" }}>
                 <div
                   className="card-header"
-                  style={{ backgroundColor: "#007bff" }}>
+                  style={{ backgroundColor: "#28a745" }}>
                   <h3 className="card-title" style={{ color: "white" }}>
-                    Add User{" "}
+                    Update User{" "}
                   </h3>
-
-                  {/*<div className="card-tools">
+                  <div className="card-tools">
                     <button
                       type="button"
                       className="btn btn-tool"
@@ -111,7 +135,7 @@ function AddUser({
                       title="Collapse">
                       <i className="fas fa-minus" />
                     </button>
-                  </div> */}
+                  </div>
                 </div>
                 <div className="card-body" style={{ display: "block" }}>
                   {/* 7ot lena el code  */}
@@ -154,34 +178,6 @@ function AddUser({
                             placeholder="Username"
                             name="username"
                             value={username}
-                            onChange={(e) => onChange(e)}
-                          />
-                        </div>
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="exampleInputName">Password</label>
-                        <div className="col-6">
-                          <input
-                            type="password"
-                            className="form-control"
-                            placeholder="Password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => onChange(e)}
-                          />
-                        </div>
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="exampleInputName">
-                          Confirm password
-                        </label>
-                        <div className="col-6">
-                          <input
-                            type="password"
-                            className="form-control"
-                            placeholder="Confrirm Password"
-                            name="password2"
-                            value={password2}
                             onChange={(e) => onChange(e)}
                           />
                         </div>
@@ -243,8 +239,16 @@ function AddUser({
                         <label htmlFor="exampleInputFile">
                           Account Picture :
                         </label>
-
                         <div className="col-10">
+                          <img
+                            src={user.account_picture
+                              .replace("frontend/public", ".")
+                              .replace("./frontend/public", ".")}
+                            width="350"
+                            height="350"
+                          />
+                        </div>
+                        <div className="col-6">
                           <div className="input-group">
                             <div className="custom-file">
                               <input
@@ -262,8 +266,93 @@ function AddUser({
                         </div>
                       </div>
                     </div>
-                    <button type="submit" className="btn btn-primary">
-                      Add user
+                    <button type="submit" className="btn btn-success">
+                      Submit
+                    </button>
+                    {/* /.card-body */}
+                  </form>
+
+                  {/* 7ot lena el code */}
+                </div>
+                {/* /.card-body */}
+
+                {/* /.card-footer*/}
+              </div>
+            </div>
+          </div>
+
+          {/**change paassword form */}
+          <div className="container-fluid">
+            <div className="row">
+              {/* left column */}
+
+              {/* mena zedt*/}
+              <div className="card" style={{ width: "100%" }}>
+                <div
+                  className="card-header"
+                  style={{ backgroundColor: "#dc3545" }}>
+                  <h3 className="card-title" style={{ color: "white" }}>
+                    Change Password{" "}
+                  </h3>
+                  <div className="card-tools">
+                    <button
+                      type="button"
+                      className="btn btn-tool"
+                      data-card-widget="collapse"
+                      title="Collapse">
+                      <i className="fas fa-minus" />
+                    </button>
+                  </div>
+                </div>
+                <div className="card-body" style={{ display: "block" }}>
+                  {/* 7ot lena el code  */}
+                  <form onSubmit={(e) => onSubmit1(e)}>
+                    <div className="card-body">
+                      <div className="form-group">
+                        <label htmlFor="exampleInputName">Old Password :</label>
+                        <div className="col-6">
+                          <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Old Password"
+                            name="oldpass"
+                            value={oldpass}
+                            onChange={(e) => onChange(e)}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="form-group">
+                        <label htmlFor="exampleInputName">New Password :</label>
+                        <div className="col-6">
+                          <input
+                            type="password"
+                            className="form-control"
+                            placeholder="New Password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => onChange(e)}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="exampleInputName">
+                          Confirm New Password :
+                        </label>
+                        <div className="col-6">
+                          <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Confirm New Password"
+                            name="password2"
+                            value={password2}
+                            onChange={(e) => onChange(e)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" className="btn btn-danger">
+                      Submit
                     </button>
                     {/* /.card-body */}
                   </form>
@@ -281,16 +370,18 @@ function AddUser({
     </div>
   );
 }
-AddUser.protoTypes = {
+Profile.protoTypes = {
+  update_user: PropTypes.func.isRequired,
+  loadUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  users: PropTypes.object.isRequired,
-  add_user: PropTypes.func.isRequired,
+  changePassword: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  users: state.users,
 });
 
 export default connect(mapStateToProps, {
-  add_user,
-})(AddUser);
+  update_user,
+  loadUser,
+  changePassword,
+})(Profile);

@@ -47,49 +47,6 @@ function UpdateUser({
       is_admin: loading ? "" : user.is_admin,
       is_doctor: loading ? "" : user.is_doctor,
     });
-
-    var countySel = document.getElementById("countySel"),
-      stateSel = document.getElementById("stateSel"),
-      districtSel = document.getElementById("districtSel");
-    /*
-    var opts = countySel.options;
-    for (var opt, j = 0; opt = opts[j]; j++) {
-      if (opt.value == val) {
-        countySel.selectedIndex = j;
-        break;
-      }
-    }
-    */
-    //to change when other countries added
-    /*
-    countySel.selectedIndex = 1;
-    for (var state in stateObject["Tunisia"]) {
-      stateSel.options[stateSel.options.length] = new Option(state, state);
-    }
-
-    var opts = stateSel.options;
-    for (var opt, j = 0; (opt = opts[j]); j++) {
-      if (opt.value == user.city) {
-        stateSel.selectedIndex = j;
-        break;
-      }
-    }
-    var district = stateObject[countySel.value][user.city];
-    for (var i = 0; i < district.length; i++) {
-      districtSel.options[districtSel.options.length] = new Option(
-        district[i],
-        district[i]
-      );
-    } //////////end of code to change
-
-    var opts = districtSel.options;
-    for (var opt, j = 0; (opt = opts[j]); j++) {
-      if (opt.value == user.governorate) {
-        districtSel.selectedIndex = j;
-        break;
-      }
-    }
-    */
   };
 
   const {

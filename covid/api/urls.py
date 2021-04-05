@@ -27,7 +27,6 @@ urlpatterns = [
     path('change_Password', ChangePasswordView.as_view(), name='change password'),
 
 
-
     ### test url ###
     path('test/', view_test.as_view(), name='list'),
     path('test/<pk>/', test_details, name='details'),

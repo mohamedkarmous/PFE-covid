@@ -17,12 +17,11 @@ const Dashboard = ({
 }) => {
   useEffect(() => {
     setDash();
-  }, []);
+  }, [loading]);
 
-  const setDash = (async) => {
+  const setDash = () => {
     if (!loading) {
       getPatients(user.id);
-      getTests(user.id);
     }
   };
 
@@ -85,7 +84,7 @@ const Dashboard = ({
           <div className="container-fluid">
             {/* Small boxes (Stat box) */}
             <div className="row">
-              <div className="col-lg-3 col-6">
+              <div className="col-lg-4 col-6">
                 {/* small box */}
                 <div className="small-box bg-warning">
                   <div className="inner">
@@ -101,21 +100,24 @@ const Dashboard = ({
                 </div>
               </div>
               {/* ./col */}
-              <div className="col-lg-3 col-6">
+              <div className="col-lg-4 col-6">
                 {/* small box */}
-                <div className="small-box bg-info">
+                <div className="small-box bg-danger">
                   <div className="inner">
-                    <h3>{tests.length}</h3>
-                    <p>Tests</p>
+                    <h3>1</h3>
+                    <p>Infected</p>
                   </div>
-
-                  <a href="#" className="small-box-footer">
+                  <div className="icon">
+                    <i className="ion ion-pie-graph" />
+                  </div>
+                  <Link to="/patient" className="small-box-footer">
                     More info <i className="fas fa-arrow-circle-right" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               {/* ./col */}
-              <div className="col-lg-3 col-6">
+
+              <div className="col-lg-4 col-6">
                 {/* small box */}
                 <div className="small-box bg-success">
                   <div className="inner">
@@ -127,26 +129,9 @@ const Dashboard = ({
                   <div className="icon">
                     <i className="ion ion-stats-bars" />
                   </div>
-                  <a href="#" className="small-box-footer">
+                  <Link to="/patient" className="small-box-footer">
                     More info <i className="fas fa-arrow-circle-right" />
-                  </a>
-                </div>
-              </div>
-              {/* ./col */}
-
-              <div className="col-lg-3 col-6">
-                {/* small box */}
-                <div className="small-box bg-danger">
-                  <div className="inner">
-                    <h3>1</h3>
-                    <p>Infected</p>
-                  </div>
-                  <div className="icon">
-                    <i className="ion ion-pie-graph" />
-                  </div>
-                  <a href="#" className="small-box-footer">
-                    More info <i className="fas fa-arrow-circle-right" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               {/* ./col */}

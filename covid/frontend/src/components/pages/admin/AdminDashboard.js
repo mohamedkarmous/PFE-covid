@@ -10,6 +10,7 @@ import { getTests } from "../../../actions/test";
 import { getUsers } from "../../../actions/users";
 import { Bar, Doughnut } from "react-chartjs-2";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import ReactMapGL, {
   Marker,
   Source,
@@ -17,6 +18,7 @@ import ReactMapGL, {
   GeolocateControl,
 } from "react-map-gl";
 import { v4 as uuid } from "uuid";
+import { mapboxTOKEN } from "../../../utils/LocalVariables";
 
 const AdminDashboard = ({
   getPatients,
@@ -29,8 +31,9 @@ const AdminDashboard = ({
 }) => {
   {
     useEffect(() => {
+      testAdmin();
       setDash();
-    }, []);
+    }, [loading]);
 
     const setDash = () => {
       if (!loading) {
@@ -40,6 +43,14 @@ const AdminDashboard = ({
       }
     };
   }
+  let history = useHistory();
+  const testAdmin = () => {
+    if (!loading) {
+      if (!user.is_admin) {
+        history.push("/");
+      }
+    }
+  };
   const TN = {
     Tunis: [36.8008, 10.18],
     Sfax: [34.75, 10.72],
@@ -87,20 +98,26 @@ const AdminDashboard = ({
     );
     return result;
   };
-  const makeInfectedCity = () => {
+  function makeInfectedCity(x) {
     let dict = {};
     patients.forEach((element) => {
       dict[element.city] = 0;
     });
     patients.forEach((element) => {
-      if (element.covid19 == "Infected") {
+      if (element.covid19 == x) {
         dict[element.city] = dict[element.city] + 1;
       }
     });
 
     return dict;
-  };
-  const InfectedCity = makeInfectedCity();
+  }
+  const InfectedCity = makeInfectedCity("Covid19");
+  const RecoveredCity = makeInfectedCity("Recovered");
+  const NotInfectedCity = makeInfectedCity("Not infected");
+  const PneumoniaCity = makeInfectedCity("Pneumonia");
+  const UnknownCity = makeInfectedCity("Unknown");
+
+  console.log("recoverd cities", RecoveredCity);
 
   const age = makeAgeData();
 
@@ -112,12 +129,34 @@ const AdminDashboard = ({
     return result;
   };
   const covid = makeCovidData();
+
+  const makeAdmins = () => {
+    let count = 0;
+    users.forEach((i) => {
+      if (i.is_admin == true) {
+        count = count + 1;
+      }
+    });
+    return count;
+  };
+  const numberOfAdmins = makeAdmins();
+  const makeDoctors = () => {
+    let count = 0;
+    users.forEach((i) => {
+      if (i.is_doctor == true) {
+        count = count + 1;
+      }
+    });
+    return count;
+  };
+  const numberOfDoctors = makeDoctors();
+
   /////////////////////////////////map data/////////////////////////////////////////
   const makeMapData = () => {
     let list = [];
 
     patients.forEach((element) => {
-      if (element.covid19 == "Infected") {
+      if (element.covid19 == "Covid19") {
         let lat = cityToCoordinates(element.city)[1];
         let log = cityToCoordinates(element.city)[0];
         list.push({
@@ -145,8 +184,7 @@ const AdminDashboard = ({
     width: "100%",
     height: "100%",
   });
-  const mapboxtoken =
-    "pk.eyJ1IjoibW9oYW1lZC1rYXJtb3VzIiwiYSI6ImNrbXoza2xhZDBhMDAyc3BmYXdsZzZ5bHYifQ.AOltPPAUduTvqaoDdx0jRw";
+  const mapboxtoken = mapboxTOKEN;
 
   const clusterLayer = {
     id: "clusters",
@@ -231,7 +269,7 @@ const AdminDashboard = ({
             <div className="container-fluid">
               {/* Small boxes (Stat box) */}
               <div className="row">
-                <div className="col-lg-4 col-6">
+                <div className="col-lg-3 col-6">
                   {/* small box */}
                   <div className="small-box bg-warning">
                     <div className="inner">
@@ -247,12 +285,12 @@ const AdminDashboard = ({
                   </div>
                 </div>
                 {/* ./col */}
-                <div className="col-lg-4 col-6">
+                <div className="col-lg-3 col-6">
                   {/* small box */}
                   <div className="small-box bg-info">
                     <div className="inner">
-                      <h3>{users.length}</h3>
-                      <p>Users</p>
+                      <h3>{numberOfAdmins}</h3>
+                      <p>Admins</p>
                     </div>
                     <Link to="/users" className="small-box-footer">
                       More info <i className="fas fa-arrow-circle-right" />
@@ -260,9 +298,26 @@ const AdminDashboard = ({
                   </div>
                 </div>
                 {/* ./col */}
-                <div className="col-lg-4 col-6">
+                <div className="col-lg-3 col-6">
                   {/* small box */}
                   <div className="small-box bg-success">
+                    <div className="inner">
+                      <h3>{numberOfDoctors}</h3>
+                      <p>Doctors</p>
+                    </div>
+                    <div className="icon">
+                      <i className="ion ion-stats-bars" />
+                    </div>
+                    <Link to="/users" className="small-box-footer">
+                      More info <i className="fas fa-arrow-circle-right" />
+                    </Link>
+                  </div>
+                </div>
+                {/* ./col */}
+
+                <div className="col-lg-3 col-6">
+                  {/* small box */}
+                  <div className="small-box bg-danger">
                     <div className="inner">
                       <h3>{tests.length}</h3>
                       <p>Xray-images</p>
@@ -275,8 +330,6 @@ const AdminDashboard = ({
                     </Link>
                   </div>
                 </div>
-                {/* ./col */}
-
                 {/* ./col */}
               </div>
               {/* /.row */}
@@ -298,7 +351,7 @@ const AdminDashboard = ({
                               className="nav-link active"
                               href="#revenue-chart"
                               data-toggle="tab">
-                              Sex
+                              Cities
                             </a>
                           </li>
                           <li className="nav-item">
@@ -319,32 +372,38 @@ const AdminDashboard = ({
                         <div
                           className="chart tab-pane active"
                           id="revenue-chart"
-                          style={{ position: "relative", height: 300 }}>
+                          style={{ position: "relative", height: 500 }}>
                           <Bar
                             data={{
-                              labels: Object.keys(sex),
+                              labels: Object.keys(InfectedCity),
                               datasets: [
                                 {
-                                  label: "Sex",
-                                  data: Object.values(sex),
-                                  backgroundColor: [
-                                    "rgba(54, 162, 235, 0.2)",
-                                    "rgba(255, 99, 132, 0.2)",
+                                  label: "Covid19",
+                                  data: Object.values(InfectedCity),
+                                  backgroundColor: "#ff8080",
+                                  borderColor: "#ff8080",
+                                  borderWidth: 1,
+                                },
+                                {
+                                  label: "Pneumonia",
+                                  data: Object.values(PneumoniaCity),
+                                  backgroundColor: "#ffa07a",
+                                  borderColor: "#ffa07a",
+                                  borderWidth: 1,
+                                },
+                                {
+                                  label: "Not infected",
+                                  data: Object.values(NotInfectedCity),
+                                  backgroundColor: "#90ee90",
+                                  borderColor: "#90ee90",
+                                  borderWidth: 1,
+                                },
+                                {
+                                  label: "Recoverd",
+                                  data: Object.values(RecoveredCity),
+                                  backgroundColor: "#e6e600",
+                                  borderColor: "#e6e600",
 
-                                    "rgba(255, 206, 86, 0.2)",
-                                    "rgba(75, 192, 192, 0.2)",
-                                    "rgba(153, 102, 255, 0.2)",
-                                    "rgba(255, 159, 64, 0.2)",
-                                  ],
-                                  borderColor: [
-                                    "rgba(54, 162, 235, 1)",
-                                    "rgba(255, 99, 132, 1)",
-
-                                    "rgba(255, 206, 86, 1)",
-                                    "rgba(75, 192, 192, 1)",
-                                    "rgba(153, 102, 255, 1)",
-                                    "rgba(255, 159, 64, 1)",
-                                  ],
                                   borderWidth: 1,
                                 },
                               ],
@@ -352,9 +411,17 @@ const AdminDashboard = ({
                             width={100}
                             height={100}
                             options={{
+                              responsive: true,
+                              interaction: {
+                                intersect: false,
+                              },
                               maintainAspectRatio: false,
                               scales: {
-                                yAxes: [{ ticks: { beginAtZero: true } }],
+                                yAxes: [
+                                  {
+                                    ticks: { beginAtZero: true },
+                                  },
+                                ],
                               },
                             }}
                           />
@@ -362,7 +429,7 @@ const AdminDashboard = ({
                         <div
                           className="chart tab-pane"
                           id="sales-chart"
-                          style={{ position: "relative", height: 300 }}>
+                          style={{ position: "relative", height: 500 }}>
                           <Bar
                             data={{
                               labels: Object.keys(covid),
@@ -450,7 +517,7 @@ const AdminDashboard = ({
                           style={geolocateControlStyle}
                           positionOptions={{ enableHighAccuracy: false }}
                           trackUserLocation={false}
-                          showAccuracyCircle={true}
+                          showAccuracyCircle={false}
                           showUserLocation={true}
                           fitBoundsOptions={{ maxZoom: 8 }}
                           //auto
@@ -547,49 +614,18 @@ const AdminDashboard = ({
                           labels: Object.keys(InfectedCity),
                           datasets: [
                             {
-                              label: "Cities",
+                              label: "Covid19",
                               data: Object.values(InfectedCity),
-                              backgroundColor: [
-                                "rgba(54, 162, 235, 0.2)",
-
-                                "rgba(255, 206, 86, 0.2)",
-                                "rgba(255, 99, 132, 0.2)",
-                                "rgba(75, 192, 192, 0.2)",
-                                "rgba(153, 102, 255, 0.2)",
-                                "rgba(255, 159, 64, 0.2)",
-                              ],
-                              borderColor: [
-                                "rgba(54, 162, 235, 1)",
-
-                                "rgba(255, 206, 86, 1)",
-                                "rgba(255, 99, 132, 1)",
-                                "rgba(75, 192, 192, 1)",
-                                "rgba(153, 102, 255, 1)",
-                                "rgba(255, 159, 64, 1)",
-                              ],
+                              backgroundColor: "#ff8080",
+                              borderColor: "#ff3333",
                               borderWidth: 1,
                             },
                             {
-                              label: "Cities",
-                              data: Object.values(InfectedCity),
-                              backgroundColor: [
-                                "rgba(54, 162, 235, 0.2)",
+                              label: "Recoverd",
+                              data: Object.values(RecoveredCity),
+                              backgroundColor: "#85e085",
+                              borderColor: "#33cc33",
 
-                                "rgba(255, 206, 86, 0.2)",
-                                "rgba(255, 99, 132, 0.2)",
-                                "rgba(75, 192, 192, 0.2)",
-                                "rgba(153, 102, 255, 0.2)",
-                                "rgba(255, 159, 64, 0.2)",
-                              ],
-                              borderColor: [
-                                "rgba(54, 162, 235, 1)",
-
-                                "rgba(255, 206, 86, 1)",
-                                "rgba(255, 99, 132, 1)",
-                                "rgba(75, 192, 192, 1)",
-                                "rgba(153, 102, 255, 1)",
-                                "rgba(255, 159, 64, 1)",
-                              ],
                               borderWidth: 1,
                             },
                           ],
@@ -597,8 +633,22 @@ const AdminDashboard = ({
                         width={100}
                         height={100}
                         options={{
+                          responsive: true,
+                          interaction: {
+                            intersect: false,
+                          },
                           maintainAspectRatio: false,
-                          scales: { yAxes: [{ ticks: { beginAtZero: true } }] },
+                          scales: {
+                            xAxes: {
+                              stacked: true,
+                            },
+                            y: {
+                              stacked: true,
+                            },
+                            yAxes: [
+                              { stacked: true, ticks: { beginAtZero: true } },
+                            ],
+                          },
                         }}
                       />
                     </div>
