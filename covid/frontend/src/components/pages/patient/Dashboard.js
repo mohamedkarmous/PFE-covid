@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { getPatients } from "../../actions/patient";
-import { getTests } from "../../actions/test";
+import { getPatients } from "../../../actions/patient";
+import { getTests } from "../../../actions/test";
 import { Bar, Doughnut } from "react-chartjs-2";
 
 import PropTypes from "prop-types";
@@ -53,6 +53,18 @@ const Dashboard = ({
   };
   const covid = makeCovidData();
 
+  const makeInfected = (x) => {
+    let count = 0;
+    patients.forEach((i) => {
+      if (i.covid19 == x) {
+        count = count + 1;
+      }
+    });
+    return count;
+  };
+  const numberOfInfected = makeInfected("Covid19");
+  const numberOfRecovered = makeInfected("Recovered");
+
   return (
     <div>
       <div className="content-wrapper">
@@ -89,7 +101,7 @@ const Dashboard = ({
                 <div className="small-box bg-warning">
                   <div className="inner">
                     <h3>{patients.length}</h3>
-                    <p>Patient Registrations</p>
+                    <p>Patients</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-person-add" />
@@ -104,7 +116,7 @@ const Dashboard = ({
                 {/* small box */}
                 <div className="small-box bg-danger">
                   <div className="inner">
-                    <h3>1</h3>
+                    <h3>{numberOfInfected}</h3>
                     <p>Infected</p>
                   </div>
                   <div className="icon">
@@ -121,9 +133,7 @@ const Dashboard = ({
                 {/* small box */}
                 <div className="small-box bg-success">
                   <div className="inner">
-                    <h3>
-                      20<sup style={{ fontSize: 20 }}>%</sup>
-                    </h3>
+                    <h3>{numberOfRecovered}</h3>
                     <p>Recovered</p>
                   </div>
                   <div className="icon">
