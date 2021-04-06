@@ -317,7 +317,7 @@ function AddPatient({ auth: { loading, user }, add_patient }) {
                     {/* /.card-body */}
                     <div className="card-footer">
                       <button type="submit" className="btn btn-primary">
-                        Submit
+                        Add
                       </button>
                     </div>
                   </form>
