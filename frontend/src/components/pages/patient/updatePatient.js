@@ -23,8 +23,8 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { stateNames } from "../../../utils/LocalVariables";
 
 function UpdatePatient({
-  auth: { user },
-  patient: { patient, loading },
+  auth: { user, loading },
+  patient: { patient },
   test: { tests },
   update_patient,
   sendTest,
@@ -86,16 +86,28 @@ function UpdatePatient({
     document.getElementById("birthday").setAttribute("max", today);
   }
 
-  useEffect(() => {
-    setPage();
-  }, [patient]);
+  const testPatient = () => {
+    if (!loading && patient == null) {
+      history.push("/");
+    }
+  };
 
+  useEffect(() => {
+    testPatient();
+    setPage();
+  }, [loading]);
+
+  var patientPiture = "";
   function setPage() {
-    if (!loading) {
+    if (!loading && patient) {
       getTests(patient.id);
       set_selection_fields();
       set_date_max();
       set_form();
+      patientPiture = patient.patient_picture.replace(
+        "http://localhost:8000/api/patient/frontend/public",
+        "."
+      );
     }
   }
 
@@ -479,14 +491,7 @@ function UpdatePatient({
                           Patient Picture :
                         </label>
                         <div className="col-10">
-                          <img
-                            src={patient.patient_picture.replace(
-                              "http://localhost:8000/api/patient/frontend/public",
-                              "."
-                            )}
-                            width="600"
-                            height="500"
-                          />
+                          <img src={patientPiture} width="600" height="500" />
                         </div>
                         <div className="col-10">
                           <div className="input-group">

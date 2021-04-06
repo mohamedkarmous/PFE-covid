@@ -53,6 +53,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         users: [],
+        user: null,
         loading: false,
         user: null,
       };

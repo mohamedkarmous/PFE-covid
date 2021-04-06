@@ -53,6 +53,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         patients: [],
+        patient: null,
         loading: false,
         patient: null,
       };

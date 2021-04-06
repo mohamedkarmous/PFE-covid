@@ -4,6 +4,7 @@ import {
   GET_TESTS,
   DELETE_TEST,
   UPDATE_TEST,
+  LOGOUT,
 } from "../actions/types";
 const initialState = {
   test: null,
@@ -42,6 +43,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         error: payload,
+        loading: false,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        tests: [],
+        test: null,
         loading: false,
       };
 

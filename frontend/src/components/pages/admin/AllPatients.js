@@ -173,14 +173,14 @@ const AllPatients = ({
                     <div className="card-body">
                       <div
                         className="ag-theme-alpine"
-                        style={{ height: 600, width: "100%" }}>
+                        style={{ height: 700, width: "100%" }}>
                         <AgGridReact
                           rowData={patients}
                           onGridReady={onGridReady}
                           sideBar={"filters"}
                           // rowSelection="multiple"
                           pagination={true}
-                          paginationPageSize={10}
+                          paginationPageSize={20}
                           frameworkComponents={{
                             update: updateButton,
                             delete: deleteButton,

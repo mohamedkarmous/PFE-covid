@@ -237,8 +237,6 @@ const AdminDashboard = ({
 
   return (
     <div>
-      <Navbar />
-      <SideBar />
       <div>
         <div className="content-wrapper">
           {/* Content Header (Psex header) */}
@@ -736,7 +734,6 @@ const AdminDashboard = ({
         {/* /.control-sidebar */}
         {/* ./wrapper */}
       </div>
-      <Footer />
     </div>
   );
 };

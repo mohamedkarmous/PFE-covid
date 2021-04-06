@@ -138,14 +138,14 @@ const PatientTable = ({
 
   return (
     <div>
-      <div className="ag-theme-alpine" style={{ height: 550, width: "100%" }}>
+      <div className="ag-theme-alpine" style={{ height: 700, width: "100%" }}>
         <AgGridReact
           rowData={patients}
           onGridReady={onGridReady}
           sideBar={"filters"}
           // rowSelection="multiple"
           pagination={true}
-          paginationPageSize={10}
+          paginationPageSize={20}
           frameworkComponents={{ update: updateButton, delete: deleteButton }}
           enableCharts={true}>
           <AgGridColumn
