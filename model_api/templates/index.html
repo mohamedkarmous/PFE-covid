@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Covid Classifier</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  </head>
+  <body>
+    <h1 style="text-align:center;">Covid image classifier</h1>
+    <div>
+        <form method="post" action="{{ url_for('action')}}" enctype="multipart/form-data">
+
+        <input type="file" name="xray_image" accept=".jpg,.jpeg,.png"required="required" />
+        <br>
+            <br>
+            <br>
+        <input type="submit" id="submitButton" value="Run"/>
+    </form>
+    </div>
+    {% if transcript != "" %}
+        <div >
+            <h1>Result</h1>
+            <p id="resut">{{ result }}</p>
+            <h1>probabilities</h1>
+            <p id="proba">{{ proba }}</p>
+        </div>
+    {% endif %}
+
+  </body>
+</html>
