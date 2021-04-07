@@ -22,6 +22,11 @@ const Alert = ({ alerts }) =>
           toastId: alert.id,
         });
         break;
+      case "warning":
+        toast.warn(alert.msg, {
+          toastId: alert.id,
+        });
+        break;
 
       default:
         break;

@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django_resized import ResizedImageField
+import datetime
 
 
 sex_choices = [('F', 'female'), ('M', 'male')]
@@ -18,8 +19,9 @@ def upload_location_patient(instance, filename, **kwargs):
 
 
 def upload_location_test(instance, filename, **kwargs):
-    file_path = './frontend/public/pictures/patient-test/{patient}-{date_added}.{filename}'.format(
-        patient=str(instance.patient), date_added=str(instance.date_added), filename=str(filename.split('.')[-1])
+    print(instance)
+    file_path = './frontend/public/pictures/patient-test/{patient}-{result}-{date}.{filename}'.format(
+        patient=str(instance.patient.id), result=str(instance.result.split(' ')[0]), date=str(timezone.now()).split('.')[0], filename=str(filename.split('.')[-1])
     )
     return file_path
 
@@ -59,7 +61,7 @@ class patient(models.Model):
     covid19 = models.CharField(max_length=30)
 
     def set_age(self):
-        import datetime
+
         dob = self.date_of_birth
         tod = datetime.date.today()
         my_age = (tod.year - dob.year) - \

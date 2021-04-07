@@ -5,7 +5,8 @@ import mainPage from "./components/pages/mainPage";
 import AddPatient from "./components/pages/patient/addPatient";
 import UpdatePatient from "./components/pages/patient/updatePatient";
 import UpdateUser from "./components/pages/admin/updateUser";
-import AdminDashboard from "./components/pages/admin/AdminDashboard";
+import adminHome from "./components/pages/admin/adminHome";
+import doctorHome from "./components/pages/patient/doctorHome";
 import patientsPage from "./components/pages/patient/patientsPage";
 import userPage from "./components/pages/admin/usersPage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -53,7 +54,8 @@ function App() {
             <PrivateRoute exact path="/patient" component={patientsPage} />
             <PrivateRoute exact path="/users" component={userPage} />
             <PrivateRoute exact path="/profile" component={profile} />
-            <PrivateRoute exact path="/admin" component={AdminDashboard} />
+            <PrivateRoute exact path="/admin" component={adminHome} />
+            <PrivateRoute exact path="/doctor" component={doctorHome} />
             <PrivateRoute exact path="/addUser" component={AddUser} />
             <PrivateRoute exact path="/allTests" component={allTests} />
             <PrivateRoute exact path="/allPatients" component={AllPatients} />

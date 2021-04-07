@@ -65,15 +65,15 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
         <b>Doctor routes</b>
       </li>
       <li className="nav-item">
-        <Link to="/">
+        <Link to="/doctor">
           <a className="nav-link">
             <ion-icon
-              name="home-outline"
+              name="bar-chart-outline"
               style={{
                 fontSize: "20px",
                 color: "white",
               }}></ion-icon>
-            <p style={{ paddingLeft: "10px" }}>Home</p>
+            <p style={{ paddingLeft: "10px" }}>Doctor Dashboard</p>
           </a>
         </Link>
       </li>
@@ -192,8 +192,8 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
         {/* Brand Logo */}
         <a href="index3.html" className="brand-link">
           <img
-            src="dist/img/AdminLTELogo.png"
-            alt="AdminLTE Logo"
+            src="logo_covid.png"
+            alt="Covid-19"
             className="brand-image img-circle elevation-3"
             style={{ opacity: ".8" }}
           />

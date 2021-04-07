@@ -1,23 +1,20 @@
 import React from "react";
-import Navbar from "../../layout/Navbar";
-import SideBar from "../../layout/SideBar";
-import Footer from "../../layout/Footer";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { getPatients } from "../../../actions/patient";
 import { getTests } from "../../../actions/test";
 import { getUsers } from "../../../actions/users";
-import { Bar, Doughnut } from "react-chartjs-2";
+import { Bar, Doughnut, Pie } from "react-chartjs-2";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { TN } from "../../../utils/LocalVariables";
 import ReactMapGL, {
   Marker,
   Source,
   Layer,
   GeolocateControl,
 } from "react-map-gl";
-import { v4 as uuid } from "uuid";
 import { mapboxTOKEN } from "../../../utils/LocalVariables";
 
 const AdminDashboard = ({
@@ -51,32 +48,7 @@ const AdminDashboard = ({
       }
     }
   };
-  const TN = {
-    Tunis: [36.8008, 10.18],
-    Sfax: [34.75, 10.72],
-    Sousse: [35.83, 10.625],
-    Gabès: [33.9004, 10.1],
-    Kairouan: [35.6804, 10.1],
-    Bizerte: [37.2904, 9.855],
-    Gafsa: [34.4204, 8.78],
-    Nabeul: [36.4603, 10.73],
-    Ariana: [36.8667, 10.2],
-    Kasserine: [35.1804, 8.83],
-    Monastir: [35.7307, 10.7673],
-    Tataouine: [33.0, 10.4667],
-    Medenine: [33.4, 10.4167],
-    Béja: [36.7304, 9.19],
-    Jendouba: [36.5, 8.75],
-    "El Kef": [36.1826, 8.7148],
-    Mahdia: [35.4839, 11.0409],
-    "Sidi Bouzid": [35.0167, 9.5],
-    Tozeur: [33.9304, 8.13],
-    Siliana: [36.0833, 9.3833],
-    Kebili: [33.69, 8.971],
-    Zaghouan: [36.4, 10.147],
-    "Ben Arous": [36.7545, 10.2217],
-    Manouba: [36.8101, 10.0956],
-  };
+
   const cityToCoordinates = (city) => {
     return TN[city];
   };
@@ -116,8 +88,6 @@ const AdminDashboard = ({
   const NotInfectedCity = makeInfectedCity("Not infected");
   const PneumoniaCity = makeInfectedCity("Pneumonia");
   const UnknownCity = makeInfectedCity("Unknown");
-
-  console.log("recoverd cities", RecoveredCity);
 
   const age = makeAgeData();
 
@@ -252,7 +222,7 @@ const AdminDashboard = ({
                     <li className="breadcrumb-item">
                       <a href="#">Home</a>
                     </li>
-                    <li className="breadcrumb-item active">Dashboard</li>
+                    <li className="breadcrumb-item active">Admin Dashboard</li>
                   </ol>
                 </div>
                 {/* /.col */}
@@ -274,9 +244,7 @@ const AdminDashboard = ({
                       <h3>{patients.length}</h3>
                       <p>Patients </p>
                     </div>
-                    <div className="icon">
-                      <i className="ion ion-person-add" />
-                    </div>
+
                     <Link to="/allPatients" className="small-box-footer">
                       More info <i className="fas fa-arrow-circle-right" />
                     </Link>
@@ -303,9 +271,7 @@ const AdminDashboard = ({
                       <h3>{numberOfDoctors}</h3>
                       <p>Doctors</p>
                     </div>
-                    <div className="icon">
-                      <i className="ion ion-stats-bars" />
-                    </div>
+
                     <Link to="/users" className="small-box-footer">
                       More info <i className="fas fa-arrow-circle-right" />
                     </Link>
@@ -320,9 +286,7 @@ const AdminDashboard = ({
                       <h3>{tests.length}</h3>
                       <p>Xray-images</p>
                     </div>
-                    <div className="icon">
-                      <i className="ion ion-stats-bars" />
-                    </div>
+
                     <Link to="/allTests" className="small-box-footer">
                       More info <i className="fas fa-arrow-circle-right" />
                     </Link>
@@ -357,7 +321,7 @@ const AdminDashboard = ({
                               className="nav-link"
                               href="#sales-chart"
                               data-toggle="tab">
-                              Infection
+                              Cases
                             </a>
                           </li>
                         </ul>
@@ -415,8 +379,15 @@ const AdminDashboard = ({
                               },
                               maintainAspectRatio: false,
                               scales: {
+                                xAxes: [
+                                  {
+                                    stacked: true,
+                                  },
+                                ],
+
                                 yAxes: [
                                   {
+                                    stacked: true,
                                     ticks: { beginAtZero: true },
                                   },
                                 ],
@@ -428,7 +399,7 @@ const AdminDashboard = ({
                           className="chart tab-pane"
                           id="sales-chart"
                           style={{ position: "relative", height: 500 }}>
-                          <Bar
+                          <Pie
                             data={{
                               labels: Object.keys(covid),
                               datasets: [
@@ -636,12 +607,12 @@ const AdminDashboard = ({
                           },
                           maintainAspectRatio: false,
                           scales: {
-                            xAxes: {
-                              stacked: true,
-                            },
-                            y: {
-                              stacked: true,
-                            },
+                            xAxes: [
+                              {
+                                stacked: true,
+                              },
+                            ],
+
                             yAxes: [
                               { stacked: true, ticks: { beginAtZero: true } },
                             ],

@@ -104,10 +104,6 @@ function UpdatePatient({
       set_selection_fields();
       set_date_max();
       set_form();
-      patientPiture = patient.patient_picture.replace(
-        "http://localhost:8000/api/patient/frontend/public",
-        "."
-      );
     }
   }
 
@@ -216,7 +212,7 @@ function UpdatePatient({
 
     setTimeout(() => {
       getTests(patient.id);
-    }, 750);
+    }, 1000);
   };
 
   const onSubmit = async (e) => {
@@ -237,14 +233,21 @@ function UpdatePatient({
     document.getElementById("filename").innerHTML = String("");
   };
   //table code
-
+  var [selected, setSelected] = React.useState(null);
   function remove(e, id) {
+    setSelected((selected = id));
+    /*
     deleteTest(id.id);
 
     setTimeout(() => {
       getTests(patient.id);
     }, 500);
+    */
   }
+  function confirmDelete() {
+    deleteTest(selected.id);
+  }
+
   function update(e, id) {
     let d = new FormData();
     if (id.validated == true) {
@@ -255,7 +258,7 @@ function UpdatePatient({
 
     updateTest(d, id.id);
     setTimeout(() => {
-      getTests(tests.id);
+      getTests(patient.id);
     }, 750);
   }
 
@@ -287,6 +290,8 @@ function UpdatePatient({
   const deleteButton = (props) => {
     return (
       <button
+        data-toggle="modal"
+        data-target="#exampleModal"
         type="button"
         class="btn btn-block btn-secondary"
         style={{ width: "30px", borderRadius: "4px", height: "30px" }}
@@ -491,7 +496,16 @@ function UpdatePatient({
                           Patient Picture :
                         </label>
                         <div className="col-10">
-                          <img src={patientPiture} width="600" height="500" />
+                          <img
+                            src={
+                              (patientPiture = patient.patient_picture.replace(
+                                "http://localhost:8000/api/patient/frontend/public",
+                                "."
+                              ))
+                            }
+                            width="600"
+                            height="500"
+                          />
                         </div>
                         <div className="col-10">
                           <div className="input-group">
@@ -639,6 +653,54 @@ function UpdatePatient({
           </div>
         </section>
       </div>
+      {/* modal code  */}
+
+      <div>
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-content bg-danger">
+                <div class="modal-header">
+                  <h4 class="modal-title">Delete confirmation</h4>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure ? </p>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button
+                    data-dismiss="modal"
+                    type="button"
+                    class="btn btn-outline-light"
+                    data-dismiss="modal">
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-light"
+                    onClick={confirmDelete}
+                    data-dismiss="modal">
+                    Yes delete this Test
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* modal code  */}
     </div>
   );
 }

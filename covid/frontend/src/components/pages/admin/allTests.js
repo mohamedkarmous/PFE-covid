@@ -47,13 +47,19 @@ function AllTests({
   }
 
   //table code
-
+  var [selected, setSelected] = React.useState(null);
   function remove(e, id) {
+    setSelected((selected = id));
+    /*
     deleteTest(id.id);
 
     setTimeout(() => {
-      getTests();
+      getTests(patient.id);
     }, 500);
+    */
+  }
+  function confirmDelete() {
+    deleteTest(selected.id);
   }
   function update(e, id) {
     let d = new FormData();
@@ -97,6 +103,8 @@ function AllTests({
   const deleteButton = (props) => {
     return (
       <button
+        data-toggle="modal"
+        data-target="#exampleModal"
         type="button"
         class="btn btn-block btn-secondary"
         style={{ width: "30px", borderRadius: "4px", height: "30px" }}
@@ -129,16 +137,6 @@ function AllTests({
         <div>
           {/* Content Header (Page header) */}
           <section className="content-header">
-            <div className="container-fluid">
-              <div className="row mb-2">
-                <div className="col-sm-6">
-                  <h1>DataTables</h1>
-                </div>
-                <div className="col-sm-6">
-                  <ol className="breadcrumb float-sm-right"></ol>
-                </div>
-              </div>
-            </div>
             {/* /.container-fluid */}
           </section>
           {/* Main content */}
@@ -224,6 +222,54 @@ function AllTests({
       </div>
 
       <Footer />
+      {/* modal code  */}
+
+      <div>
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-content bg-danger">
+                <div class="modal-header">
+                  <h4 class="modal-title">Delete confirmation</h4>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure ? </p>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button
+                    data-dismiss="modal"
+                    type="button"
+                    class="btn btn-outline-light"
+                    data-dismiss="modal">
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-light"
+                    onClick={confirmDelete}
+                    data-dismiss="modal">
+                    Yes delete this Test
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* modal code  */}
     </div>
   );
 }

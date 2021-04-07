@@ -21,7 +21,23 @@ export const sendTest = (data) => async (dispatch) => {
   try {
     const res = await axios.post(link, data, config);
     data.append("result", res.data.result);
-    const res2 = await axios.post("/api/test/create", data, config);
+    try {
+      const res2 = await axios.post("/api/test/create", data, config);
+
+      if (res.data.result[0] == "C") {
+        dispatch(setAlert("Test result: " + res.data.result, "danger"));
+      } else if (res.data.result[0] == "P") {
+        dispatch(setAlert("Test result: " + res.data.result, "warning"));
+      } else if (res.data.result[0] == "N") {
+        dispatch(setAlert("Test result: " + res.data.result, "success"));
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        payload: error,
+        type: TEST_ERROR,
+      });
+    }
 
     dispatch({
       type: SENDTEST,
@@ -43,7 +59,7 @@ export const getTests = (id = -1) => async (dispatch) => {
   try {
     var res = {};
     if (id == -1) {
-      res = await axios.get("/api/test");
+      res = await axios.get("/api/test?ordering=-id");
     } else {
       res = await axios.get("/api/test?search=" + id + "&ordering=-id");
     }
@@ -64,7 +80,7 @@ export const deleteTest = (id) => async (dispatch) => {
     res = await axios.delete(`/api/test/${id}/delete/`);
 
     dispatch({ type: DELETE_TEST, payload: id });
-    //dispatch(setAlert("Post Removed", "success"));
+    dispatch(setAlert("Test Removed", "success"));
   } catch (err) {
     dispatch({
       type: TEST_ERROR,
@@ -88,6 +104,7 @@ export const updateTest = (data, id) => async (dispatch) => {
       type: UPDATE_TEST,
       payload: res.data,
     });
+    dispatch(setAlert("Test updated", "success"));
   } catch (error) {
     //const errors = error.response.data.errors;
 

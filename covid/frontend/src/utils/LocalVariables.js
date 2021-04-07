@@ -1,3 +1,29 @@
+export const TN = {
+  Tunis: [36.8008, 10.18],
+  Sfax: [34.75, 10.72],
+  Sousse: [35.83, 10.625],
+  Gabès: [33.9004, 10.1],
+  Kairouan: [35.6804, 10.1],
+  Bizerte: [37.2904, 9.855],
+  Gafsa: [34.4204, 8.78],
+  Nabeul: [36.4603, 10.73],
+  Ariana: [36.8667, 10.2],
+  Kasserine: [35.1804, 8.83],
+  Monastir: [35.7307, 10.7673],
+  Tataouine: [33.0, 10.4667],
+  Medenine: [33.4, 10.4167],
+  Béja: [36.7304, 9.19],
+  Jendouba: [36.5, 8.75],
+  "El Kef": [36.1826, 8.7148],
+  Mahdia: [35.4839, 11.0409],
+  "Sidi Bouzid": [35.0167, 9.5],
+  Tozeur: [33.9304, 8.13],
+  Siliana: [36.0833, 9.3833],
+  Kebili: [33.69, 8.971],
+  Zaghouan: [36.4, 10.147],
+  "Ben Arous": [36.7545, 10.2217],
+  Manouba: [36.8101, 10.0956],
+};
 export const stateNames = {
   Tunisia: {
     Tunis: [
