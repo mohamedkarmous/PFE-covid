@@ -24,7 +24,6 @@ const MainPage = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   };
   return (
     <div>
-      <Navbar />
       <SideBar />
       {setDashboard()}
 

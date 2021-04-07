@@ -89,7 +89,6 @@ function UpdateUser({
 
   return (
     <div>
-      <Navbar />
       <SideBar />
       <div className="content-wrapper" style={{ "padding-top": "15px" }}>
         {/* Main content */}

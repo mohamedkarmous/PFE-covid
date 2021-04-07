@@ -8,7 +8,6 @@ import Footer from "../../layout/Footer";
 const usersPage = () => {
   return (
     <div>
-      <Navbar />
       <SideBar />
       <div class="content-wrapper">
         <div>

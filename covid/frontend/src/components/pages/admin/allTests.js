@@ -131,7 +131,6 @@ function AllTests({
 
   return (
     <div>
-      <Navbar />
       <SideBar />
       <div class="content-wrapper">
         <div>

@@ -5,7 +5,6 @@ import Footer from "../../layout/Footer";
 export default function doctorHome() {
   return (
     <div>
-      <Navbar />
       <SideBar />
       <Dashboard />
       <Footer />

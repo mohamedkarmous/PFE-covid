@@ -5,7 +5,6 @@ import Footer from "../../layout/Footer";
 function adminHome() {
   return (
     <div>
-      <Navbar />
       <SideBar />
       <AdminDashboard />
       <Footer />

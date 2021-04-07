@@ -43,33 +43,35 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div id="main" class="wrapper">
-          <div>
-            <Alert />
+        <div className="sidebar-mini sidebar-closed layout-fixed sidebar-collapse">
+          <div id="main" class="wrapper">
+            <div>
+              <Alert />
+            </div>
+
+            <Switch>
+              <PrivateRoute exact path="/dashboard" component={mainPage} />
+              <PrivateRoute exact path="/addPatient" component={AddPatient} />
+              <PrivateRoute exact path="/patient" component={patientsPage} />
+              <PrivateRoute exact path="/users" component={userPage} />
+              <PrivateRoute exact path="/profile" component={profile} />
+              <PrivateRoute exact path="/admin" component={adminHome} />
+              <PrivateRoute exact path="/doctor" component={doctorHome} />
+              <PrivateRoute exact path="/addUser" component={AddUser} />
+              <PrivateRoute exact path="/allTests" component={allTests} />
+              <PrivateRoute exact path="/allPatients" component={AllPatients} />
+
+              <PrivateRoute
+                exact
+                path="/updatePatient"
+                component={UpdatePatient}
+              />
+              <PrivateRoute exact path="/updateUser" component={UpdateUser} />
+              <Route exact path="/login" component={SignIn} />
+              <Route exact path="/" component={SignIn} />
+              <Route exact path="/register" component={SignUp} />
+            </Switch>
           </div>
-
-          <Switch>
-            <PrivateRoute exact path="/dashboard" component={mainPage} />
-            <PrivateRoute exact path="/addPatient" component={AddPatient} />
-            <PrivateRoute exact path="/patient" component={patientsPage} />
-            <PrivateRoute exact path="/users" component={userPage} />
-            <PrivateRoute exact path="/profile" component={profile} />
-            <PrivateRoute exact path="/admin" component={adminHome} />
-            <PrivateRoute exact path="/doctor" component={doctorHome} />
-            <PrivateRoute exact path="/addUser" component={AddUser} />
-            <PrivateRoute exact path="/allTests" component={allTests} />
-            <PrivateRoute exact path="/allPatients" component={AllPatients} />
-
-            <PrivateRoute
-              exact
-              path="/updatePatient"
-              component={UpdatePatient}
-            />
-            <PrivateRoute exact path="/updateUser" component={UpdateUser} />
-            <Route exact path="/login" component={SignIn} />
-            <Route exact path="/" component={SignIn} />
-            <Route exact path="/register" component={SignUp} />
-          </Switch>
         </div>
       </Router>
     </Provider>
