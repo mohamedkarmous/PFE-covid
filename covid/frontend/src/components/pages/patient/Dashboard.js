@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { getPatients } from "../../../actions/patient";
 import { getTests } from "../../../actions/test";
-import { Bar, Doughnut } from "react-chartjs-2";
+import { Bar, Doughnut, Pie, Line } from "react-chartjs-2";
 
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -22,6 +22,7 @@ const Dashboard = ({
   const setDash = () => {
     if (!loading) {
       getPatients(user.id);
+      getTests();
     }
   };
 
@@ -64,6 +65,67 @@ const Dashboard = ({
   };
   const numberOfInfected = makeInfected("Covid19");
   const numberOfRecovered = makeInfected("Recovered");
+
+  ////////////////////////////////////////////// infection by sex///////////////////////////////////////
+  function makeInfectedSex(x) {
+    let dict = {};
+    patients.forEach((element) => {
+      dict[element.sex] = 0;
+    });
+    patients.forEach((element) => {
+      if (element.covid19 == x) {
+        dict[element.sex] = dict[element.sex] + 1;
+      }
+    });
+
+    return dict;
+  }
+  const InfectedSex = makeInfectedSex("Covid19");
+  const RecoveredSex = makeInfectedSex("Recovered");
+  const NotInfectedSex = makeInfectedSex("Not infected");
+  const PneumoniaSex = makeInfectedSex("Pneumonia");
+  const UnknownSex = makeInfectedSex("Unknown");
+  //////////////////////////////////////////
+  ////////////////////////////infection by age////////////////////////////////////////////
+  function makeInfectedAge(x) {
+    let dict = {};
+    patients.forEach((element) => {
+      dict[element.age] = 0;
+    });
+    patients.forEach((element) => {
+      if (element.covid19 == x) {
+        dict[element.age] = dict[element.age] + 1;
+      }
+    });
+
+    return dict;
+  }
+  const InfectedAge = makeInfectedAge("Covid19");
+  const RecoveredAge = makeInfectedAge("Recovered");
+  const NotInfectedAge = makeInfectedAge("Not infected");
+  const PneumoniaAge = makeInfectedAge("Pneumonia");
+  const UnknownAge = makeInfectedAge("Unknown");
+
+  //////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////// Tests ///////////////////////////////////////
+  function makeTestsdata(x) {
+    let dict = {};
+    tests.forEach((element) => {
+      dict[element.date_added] = 0;
+    });
+    tests.forEach((element) => {
+      if (element.result[0] == x && element.account == user.id) {
+        dict[element.date_added] = dict[element.date_added] + 1;
+      }
+    });
+
+    return dict;
+  }
+  const InfectedTests = makeTestsdata("C");
+  const NotInfectedTests = makeTestsdata("N");
+  const PneumoniaTests = makeTestsdata("P");
+
+  //////////////////////////////////////////
 
   return (
     <div>
@@ -157,17 +219,17 @@ const Dashboard = ({
                         <li className="nav-item">
                           <a
                             className="nav-link active"
-                            href="#revenue-chart"
+                            href="#sales-chart"
                             data-toggle="tab">
-                            Sex
+                            Cases
                           </a>
                         </li>
                         <li className="nav-item">
                           <a
                             className="nav-link"
-                            href="#sales-chart"
+                            href="#revenue-chart"
                             data-toggle="tab">
-                            Infection
+                            Age
                           </a>
                         </li>
                       </ul>
@@ -178,34 +240,40 @@ const Dashboard = ({
                     <div className="tab-content p-0">
                       {/* Morris chart - Sales */}
                       <div
-                        className="chart tab-pane active"
+                        className="chart tab-pane "
                         id="revenue-chart"
-                        style={{ position: "relative", height: 300 }}>
+                        style={{ position: "relative", height: 500 }}>
                         <Bar
                           data={{
-                            labels: Object.keys(sex),
+                            labels: Object.keys(InfectedAge),
                             datasets: [
                               {
-                                label: "Sex",
-                                data: Object.values(sex),
-                                backgroundColor: [
-                                  "rgba(54, 162, 235, 0.2)",
-                                  "rgba(255, 99, 132, 0.2)",
+                                label: "Covid19",
+                                data: Object.values(InfectedAge),
+                                backgroundColor: "#ff8080",
+                                borderColor: "#ff8080",
+                                borderWidth: 1,
+                              },
+                              {
+                                label: "Pneumonia",
+                                data: Object.values(PneumoniaAge),
+                                backgroundColor: "#ffa07a",
+                                borderColor: "#ffa07a",
+                                borderWidth: 1,
+                              },
+                              {
+                                label: "Not infected",
+                                data: Object.values(NotInfectedAge),
+                                backgroundColor: "#90ee90",
+                                borderColor: "#90ee90",
+                                borderWidth: 1,
+                              },
+                              {
+                                label: "Recoverd",
+                                data: Object.values(RecoveredAge),
+                                backgroundColor: "#e6e600",
+                                borderColor: "#e6e600",
 
-                                  "rgba(255, 206, 86, 0.2)",
-                                  "rgba(75, 192, 192, 0.2)",
-                                  "rgba(153, 102, 255, 0.2)",
-                                  "rgba(255, 159, 64, 0.2)",
-                                ],
-                                borderColor: [
-                                  "rgba(54, 162, 235, 1)",
-                                  "rgba(255, 99, 132, 1)",
-
-                                  "rgba(255, 206, 86, 1)",
-                                  "rgba(75, 192, 192, 1)",
-                                  "rgba(153, 102, 255, 1)",
-                                  "rgba(255, 159, 64, 1)",
-                                ],
                                 borderWidth: 1,
                               },
                             ],
@@ -213,18 +281,33 @@ const Dashboard = ({
                           width={100}
                           height={100}
                           options={{
+                            responsive: true,
+                            interaction: {
+                              intersect: false,
+                            },
                             maintainAspectRatio: false,
                             scales: {
-                              yAxes: [{ ticks: { beginAtZero: true } }],
+                              xAxes: [
+                                {
+                                  stacked: true,
+                                },
+                              ],
+
+                              yAxes: [
+                                {
+                                  stacked: true,
+                                  ticks: { beginAtZero: true },
+                                },
+                              ],
                             },
                           }}
                         />
                       </div>
                       <div
-                        className="chart tab-pane"
+                        className="chart tab-pane active"
                         id="sales-chart"
-                        style={{ position: "relative", height: 300 }}>
-                        <Bar
+                        style={{ position: "relative", height: 500 }}>
+                        <Pie
                           data={{
                             labels: Object.keys(covid),
                             datasets: [
@@ -232,16 +315,18 @@ const Dashboard = ({
                                 label: "covid",
                                 data: Object.values(covid),
                                 backgroundColor: [
-                                  "rgba(255, 99, 132, 0.2)",
                                   "rgba(54, 162, 235, 0.2)",
+                                  "rgba(255, 99, 132, 0.2)",
+
                                   "rgba(255, 206, 86, 0.2)",
                                   "rgba(75, 192, 192, 0.2)",
                                   "rgba(153, 102, 255, 0.2)",
                                   "rgba(255, 159, 64, 0.2)",
                                 ],
                                 borderColor: [
-                                  "rgba(255, 99, 132, 1)",
                                   "rgba(54, 162, 235, 1)",
+                                  "rgba(255, 99, 132, 1)",
+
                                   "rgba(255, 206, 86, 1)",
                                   "rgba(75, 192, 192, 1)",
                                   "rgba(153, 102, 255, 1)",
@@ -268,7 +353,7 @@ const Dashboard = ({
                 {/* /.card */}
                 <div className="card card-danger">
                   <div className="card-header">
-                    <h3 className="card-title">Chart</h3>
+                    <h3 className="card-title">Tests</h3>
                     <div className="card-tools">
                       <button
                         type="button"
@@ -287,30 +372,29 @@ const Dashboard = ({
                         <div className />
                       </div>
                     </div>
-                    <Doughnut
+                    <Line
                       data={{
-                        labels: Object.keys(covid),
+                        labels: Object.keys(InfectedTests),
                         datasets: [
                           {
-                            data: Object.values(covid),
-                            backgroundColor: [
-                              "rgba(54, 162, 235, 0.2)",
-
-                              "rgba(255, 206, 86, 0.2)",
-                              "rgba(255, 99, 132, 0.2)",
-                              "rgba(75, 192, 192, 0.2)",
-                              "rgba(153, 102, 255, 0.2)",
-                              "rgba(255, 159, 64, 0.2)",
-                            ],
-                            borderColor: [
-                              "rgba(54, 162, 235, 1)",
-
-                              "rgba(255, 206, 86, 1)",
-                              "rgba(255, 99, 132, 1)",
-                              "rgba(75, 192, 192, 1)",
-                              "rgba(153, 102, 255, 1)",
-                              "rgba(255, 159, 64, 1)",
-                            ],
+                            label: "Covid19",
+                            data: Object.values(InfectedTests),
+                            backgroundColor: "#ff8080",
+                            borderColor: "#ff8080",
+                            borderWidth: 1,
+                          },
+                          {
+                            label: "Pneumonia",
+                            data: Object.values(PneumoniaTests),
+                            backgroundColor: "#ffa07a",
+                            borderColor: "#ffa07a",
+                            borderWidth: 1,
+                          },
+                          {
+                            label: "Not infected",
+                            data: Object.values(NotInfectedTests),
+                            backgroundColor: "#90ee90",
+                            borderColor: "#90ee90",
                             borderWidth: 1,
                           },
                         ],
@@ -318,8 +402,26 @@ const Dashboard = ({
                       width={100}
                       height={100}
                       options={{
+                        responsive: true,
+                        interaction: {
+                          intersect: false,
+                        },
                         maintainAspectRatio: false,
-                        scales: { yAxes: [{ ticks: { beginAtZero: true } }] },
+
+                        scales: {
+                          xAxes: [
+                            {
+                              stacked: true,
+                            },
+                          ],
+
+                          yAxes: [
+                            {
+                              stacked: true,
+                              ticks: { beginAtZero: true },
+                            },
+                          ],
+                        },
                       }}
                     />
                   </div>
@@ -329,10 +431,9 @@ const Dashboard = ({
               {/* /.Left col */}
               {/* right col (We are only adding the ID to make the widgets sortable)*/}
               <section className="col-lg-5 connectedSortable">
-                {/* Map card */}
                 <div className="card card-info">
                   <div className="card-header">
-                    <h3 className="card-title">Age</h3>
+                    <h3 className="card-title">Distribution by age</h3>
                     <div className="card-tools">
                       <button
                         type="button"
@@ -342,7 +443,7 @@ const Dashboard = ({
                       </button>
                     </div>
                   </div>
-                  <div className="card-body" style={{ height: "300px" }}>
+                  <div className="card-body" style={{ height: "500px" }}>
                     <div className="chartjs-size-monitor">
                       <div className="chartjs-size-monitor-expand">
                         <div className />
@@ -351,30 +452,37 @@ const Dashboard = ({
                         <div className />
                       </div>
                     </div>
-                    <Doughnut
+                    <Bar
                       data={{
-                        labels: Object.keys(age),
+                        labels: Object.keys(InfectedAge),
                         datasets: [
                           {
-                            data: Object.values(age),
-                            backgroundColor: [
-                              "rgba(54, 162, 235, 0.2)",
+                            label: "Covid19",
+                            data: Object.values(InfectedAge),
+                            backgroundColor: "#ff8080",
+                            borderColor: "#ff8080",
+                            borderWidth: 1,
+                          },
+                          {
+                            label: "Pneumonia",
+                            data: Object.values(PneumoniaAge),
+                            backgroundColor: "#ffa07a",
+                            borderColor: "#ffa07a",
+                            borderWidth: 1,
+                          },
+                          {
+                            label: "Not infected",
+                            data: Object.values(NotInfectedAge),
+                            backgroundColor: "#90ee90",
+                            borderColor: "#90ee90",
+                            borderWidth: 1,
+                          },
+                          {
+                            label: "Recoverd",
+                            data: Object.values(RecoveredAge),
+                            backgroundColor: "#e6e600",
+                            borderColor: "#e6e600",
 
-                              "rgba(255, 206, 86, 0.2)",
-                              "rgba(255, 99, 132, 0.2)",
-                              "rgba(75, 192, 192, 0.2)",
-                              "rgba(153, 102, 255, 0.2)",
-                              "rgba(255, 159, 64, 0.2)",
-                            ],
-                            borderColor: [
-                              "rgba(54, 162, 235, 1)",
-
-                              "rgba(255, 206, 86, 1)",
-                              "rgba(255, 99, 132, 1)",
-                              "rgba(75, 192, 192, 1)",
-                              "rgba(153, 102, 255, 1)",
-                              "rgba(255, 159, 64, 1)",
-                            ],
                             borderWidth: 1,
                           },
                         ],
@@ -382,15 +490,119 @@ const Dashboard = ({
                       width={100}
                       height={100}
                       options={{
+                        responsive: true,
+                        interaction: {
+                          intersect: false,
+                        },
                         maintainAspectRatio: false,
-                        scales: { yAxes: [{ ticks: { beginAtZero: true } }] },
+
+                        scales: {
+                          xAxes: [
+                            {
+                              stacked: true,
+                            },
+                          ],
+
+                          yAxes: [
+                            {
+                              stacked: true,
+                              ticks: { beginAtZero: true },
+                            },
+                          ],
+                        },
                       }}
                     />
                   </div>
                   {/* /.card-body */}
                 </div>
                 {/* /.card */}
-                {/* Calendar */}
+                <div className="card card-info">
+                  <div className="card-header">
+                    <h3 className="card-title">Distribution by sex</h3>
+                    <div className="card-tools">
+                      <button
+                        type="button"
+                        className="btn btn-tool"
+                        data-card-widget="collapse">
+                        <i className="fas fa-minus" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="card-body" style={{ height: "350px" }}>
+                    <div className="chartjs-size-monitor">
+                      <div className="chartjs-size-monitor-expand">
+                        <div className />
+                      </div>
+                      <div className="chartjs-size-monitor-shrink">
+                        <div className />
+                      </div>
+                    </div>
+                    <Bar
+                      data={{
+                        labels: Object.keys(InfectedSex),
+                        datasets: [
+                          {
+                            label: "Covid19",
+                            data: Object.values(InfectedSex),
+                            backgroundColor: "#ff8080",
+                            borderColor: "#ff8080",
+                            borderWidth: 1,
+                          },
+                          {
+                            label: "Pneumonia",
+                            data: Object.values(PneumoniaSex),
+                            backgroundColor: "#ffa07a",
+                            borderColor: "#ffa07a",
+                            borderWidth: 1,
+                          },
+                          {
+                            label: "Not infected",
+                            data: Object.values(NotInfectedSex),
+                            backgroundColor: "#90ee90",
+                            borderColor: "#90ee90",
+                            borderWidth: 1,
+                          },
+                          {
+                            label: "Recoverd",
+                            data: Object.values(RecoveredSex),
+                            backgroundColor: "#e6e600",
+                            borderColor: "#e6e600",
+
+                            borderWidth: 1,
+                          },
+                        ],
+                      }}
+                      width={100}
+                      height={100}
+                      options={{
+                        responsive: true,
+                        interaction: {
+                          intersect: false,
+                        },
+                        maintainAspectRatio: false,
+
+                        scales: {
+                          xAxes: [
+                            {
+                              stacked: true,
+                            },
+                          ],
+
+                          yAxes: [
+                            {
+                              stacked: true,
+                              ticks: { beginAtZero: true },
+                            },
+                          ],
+                        },
+                      }}
+                    />
+                  </div>
+                  {/* /.card-body */}
+                </div>
+                {/* /.card */}
+
+                {/* line chart */}
 
                 {/* /.card */}
               </section>
@@ -400,6 +612,8 @@ const Dashboard = ({
           </div>
           {/* /.container-fluid */}
         </section>
+        {/* right col */}
+
         {/* /.content */}
       </div>
       {/* /.content-wrapper */}
