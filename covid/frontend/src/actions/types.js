@@ -25,6 +25,13 @@ export const GET_TESTS = "GET_TESTS";
 export const DELETE_TEST = "DELETE_TEST";
 export const UPDATE_TEST = "UPDATE_TEST";
 
+//diagnostics
+export const SENDDIAGNOSTIC = "SENDDIAGNOSTIC";
+export const DIAGNOSTIC_ERROR = "DIAGNOSTIC_ERROR";
+export const GET_DIAGNOSTICS = "GET_DIAGNOSTICS";
+export const DELETE_DIAGNOSTIC = "DELETE_DIAGNOSTIC";
+export const UPDATE_DIAGNOSTIC = "UPDATE_DIAGNOSTIC";
+
 //users
 
 export const USERS_ERROR = "USERS_ERROR";

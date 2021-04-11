@@ -1,7 +1,7 @@
 from django.db.models.query import QuerySet
 from django.shortcuts import render
-from .serializer import AccountSeriaizer, PatientSerializer, AccountPropertiesSerializer, UserPropertiesSerializer, TestSerializer, ChangePasswordSerializer
-from .models import patient, account, patient_test
+from .serializer import AccountSeriaizer, PatientSerializer, AccountPropertiesSerializer, UserPropertiesSerializer, TestSerializer, ChangePasswordSerializer, DiagnosticSerializer
+from .models import patient, account, patient_test, diagnostic
 #from rest_framework.parsers import FormParser,MultiPartParser,JSONParser
 # import
 from django.contrib.auth.models import User
@@ -390,6 +390,86 @@ def create_test(request):
 class view_test(ListAPIView):
     queryset = patient_test.objects.all()
     serializer_class = TestSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+   # pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('patient__id',)
+
+    ##################################
+
+    ############## diagnostic api ###################
+
+
+@api_view(['GET', ])
+@permission_classes((IsAuthenticated,))
+def diagnostic_details(request, pk):
+    try:
+        diagnostic_data = diagnostic.objects.get(id=pk)
+
+    except diagnostic.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        return Response(DiagnosticSerializer(diagnostic_data).data)
+
+
+@api_view(['PUT', ])
+@permission_classes((IsAuthenticated, ))
+def update_diagnostic(request, pk):
+
+    try:
+        diagnostic_data = diagnostic.objects.get(id=pk)
+    except diagnostic.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = DiagnosticSerializer(diagnostic_data, data=request.data)
+        data = {}
+        if serializer.is_valid():
+            serializer.save()
+
+            data[SUCCESS] = UPDATE_SUCCESS
+            return Response(data=data)
+        # print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE', ])
+@permission_classes((IsAuthenticated, ))
+def delete_diagnostic(request, pk):
+
+    try:
+        diagnostic_data = diagnostic.objects.get(id=pk)
+    except diagnostic.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'DELETE':
+        operation = diagnostic_data.delete()
+        data = {}
+        if operation:
+            data[SUCCESS] = DELETE_SUCCESS
+        return Response(data=data)
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated, ))
+def create_diagnostic(request):
+
+    if request.method == 'POST':
+        serializer = DiagnosticSerializer(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes((IsAuthenticated,))
+class view_diagnostic(ListAPIView):
+    queryset = diagnostic.objects.all()
+    serializer_class = DiagnosticSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
    # pagination_class = PageNumberPagination

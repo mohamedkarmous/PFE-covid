@@ -11,6 +11,13 @@ import {
   updateTest,
 } from "../../../actions/test";
 
+import {
+  sendDiagnostic,
+  getDiagnostics,
+  deleteDiagnostic,
+  updateDiagnostic,
+} from "../../../actions/diagnostic";
+
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link, Redirect } from "react-router-dom";
@@ -31,6 +38,10 @@ function UpdatePatient({
   getTests,
   deleteTest,
   updateTest,
+  sendDiagnostic,
+  getDiagnostics,
+  deleteDiagnostic,
+  updateDiagnostic,
 }) {
   let history = useHistory();
 
@@ -101,6 +112,7 @@ function UpdatePatient({
   function setPage() {
     if (!loading && patient) {
       getTests(patient.id);
+      getDiagnostics(patient.id);
       set_selection_fields();
       set_date_max();
       set_form();
@@ -315,6 +327,8 @@ function UpdatePatient({
   const [rowData, setRowData] = useState(tests);
   const [gridApi, setGridApi] = useState(null);
   const [gridColumnApi, setGridColumnApi] = useState(null);
+
+  /////diagnostic table code
 
   return (
     <div>
@@ -708,15 +722,21 @@ UpdatePatient.protoTypes = {
   auth: PropTypes.object.isRequired,
   patient: PropTypes.object.isRequired,
   test: PropTypes.object.isRequired,
+  diagnostic: PropTypes.object.isRequired,
   sendTest: PropTypes.func.isRequired,
   getTests: PropTypes.func.isRequired,
   deleteTest: PropTypes.func.isRequired,
   updateTest: PropTypes.func.isRequired,
+  sendDiagnostic: PropTypes.func.isRequired,
+  getDiagnostics: PropTypes.func.isRequired,
+  deleteDiagnostic: PropTypes.func.isRequired,
+  updateDiagnostic: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
   patient: state.patient,
   test: state.test,
+  diagnostic: state.diagnostic,
 });
 
 export default connect(mapStateToProps, {
@@ -725,4 +745,8 @@ export default connect(mapStateToProps, {
   getTests,
   deleteTest,
   updateTest,
+  sendDiagnostic,
+  getDiagnostics,
+  deleteDiagnostic,
+  updateDiagnostic,
 })(UpdatePatient);

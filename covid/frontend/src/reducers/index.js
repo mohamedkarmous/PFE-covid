@@ -4,6 +4,7 @@ import auth from "./auth";
 import patient from "./patient";
 import test from "./test";
 import users from "./users";
+import diagnostic from "./diagnostic";
 
 export default combineReducers({
   alert,
@@ -11,4 +12,5 @@ export default combineReducers({
   patient,
   test,
   users,
+  diagnostic,
 });

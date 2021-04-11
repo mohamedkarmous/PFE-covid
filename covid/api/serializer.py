@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import patient, account, patient_test
+from .models import patient, account, patient_test, diagnostic
 from django.contrib.auth.models import User
 from django.contrib.auth.models import User
 
@@ -26,6 +26,13 @@ class PatientSerializer(serializers.ModelSerializer):
 class TestSerializer(serializers.ModelSerializer):
     class Meta:
         model = patient_test
+
+        fields = '__all__'
+
+
+class DiagnosticSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = diagnostic
 
         fields = '__all__'
 

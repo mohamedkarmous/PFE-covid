@@ -84,6 +84,22 @@ class patient_test(models.Model):
     account = models.ForeignKey(account, on_delete=models.CASCADE, default=21)
 
 
+class diagnostic(models.Model):
+    cough = models.CharField(max_length=30, default="false")
+    fever = models.CharField(max_length=30, default="false")
+    sore_throat = models.CharField(max_length=30, default="false")
+    shortness_of_breath = models.CharField(max_length=30, default="false")
+    head_ache = models.CharField(max_length=30, default="false")
+    gender = models.CharField(max_length=30, default="false")
+
+    date_added = models.DateField(
+        verbose_name="date_added", auto_now=True)
+    validated = models.BooleanField(default=False)
+    result = models.CharField(max_length=30, default="")
+    patient = models.ForeignKey(patient, on_delete=models.CASCADE, default=1)
+    account = models.ForeignKey(account, on_delete=models.CASCADE, default=21)
+
+
 @receiver(models.signals.post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
 
