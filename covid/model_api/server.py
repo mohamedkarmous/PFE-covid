@@ -28,15 +28,19 @@ def predict():
 
 @app.route("/sympt", methods=['POST'])
 def predict_symp():
+
     result = {}
 
     list = [0, 0, 0, 0, 0, 0]
     symptoms = ["cough", "fever", "sore_throat",
-                "shortness_of_breath", "head_ache", "gender"]
+                "shortness_of_breath", "head_ache", ]
     for i in range(len(symptoms)):
         if(request.form[symptoms[i]] == "true"):
             list[i] = 1
+    if(request.form["gender"] == "Male"):
+        list[-1] = 1
     model = Classifier()
+    print(list)
 
     model_result = model.predict([list])
     print(model_result)

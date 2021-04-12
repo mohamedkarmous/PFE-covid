@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "../../layout/Navbar";
 import SideBar from "../../layout/SideBar";
+
 import { useEffect } from "react";
 import { useState } from "react";
 import { update_patient } from "../../../actions/patient";
@@ -33,6 +34,7 @@ function UpdatePatient({
   auth: { user, loading },
   patient: { patient },
   test: { tests },
+  diagnostic: { diagnostics },
   update_patient,
   sendTest,
   getTests,
@@ -192,8 +194,25 @@ function UpdatePatient({
     date_of_birth,
     covid19,
   } = formData;
+
+  const [formDataDiag, setFormDataDiag] = useState({
+    cough: "false",
+    fever: "false",
+    sore_throat: "false",
+    shortness_of_breath: "false",
+    head_ache: "false",
+  });
+  const {
+    cough,
+    fever,
+    sore_throat,
+    shortness_of_breath,
+    head_ache,
+  } = formDataDiag;
+
   var Data = new FormData();
   var Data1 = new FormData();
+  var DataDiagnostic = new FormData();
 
   var imagefile = document.querySelector("#file");
   var imagetest = document.querySelector("#testFile");
@@ -214,6 +233,11 @@ function UpdatePatient({
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const onChangeDiag = (e) => {
+    setFormDataDiag({ ...formDataDiag, [e.target.name]: e.target.value });
+    console.log(formDataDiag);
   };
   const onSubmit1 = async (e) => {
     e.preventDefault();
@@ -243,6 +267,32 @@ function UpdatePatient({
 
     update_patient(Data, patient.id, history);
     document.getElementById("filename").innerHTML = String("");
+  };
+
+  const onSubmitDiagnostic = async (e) => {
+    e.preventDefault();
+    console.log(formDataDiag);
+    DataDiagnostic.append("cough", formDataDiag.cough);
+    DataDiagnostic.append("fever", formDataDiag.fever);
+    DataDiagnostic.append("sore_throat", formDataDiag.sore_throat);
+    DataDiagnostic.append(
+      "shortness_of_breath",
+      formDataDiag.shortness_of_breath
+    );
+    DataDiagnostic.append("head_ache", formDataDiag.head_ache);
+    if (user != null) {
+      DataDiagnostic.append("account", user.id);
+    }
+    if (patient != null) {
+      DataDiagnostic.append("patient", patient.id);
+      DataDiagnostic.append("gender", patient.sex);
+    }
+
+    setTimeout(() => {
+      getDiagnostics(patient.id);
+    }, 1000);
+
+    sendDiagnostic(DataDiagnostic);
   };
   //table code
   var [selected, setSelected] = React.useState(null);
@@ -287,6 +337,66 @@ function UpdatePatient({
     setGridApi(params.api);
     setGridColumnApi(params.columnApi.columnApi);
   };
+
+  ////////////////code of diagnostic table//////
+
+  var [selected1, setSelected1] = React.useState(null);
+  function remove1(e, id) {
+    setSelected1((selected1 = id));
+    /*
+    deleteTest(id.id);
+
+    setTimeout(() => {
+      getTests(patient.id);
+    }, 500);
+    */
+  }
+  function confirmDelete1() {
+    deleteDiagnostic(selected1.id);
+  }
+
+  function update1(e, id) {
+    let d = new FormData();
+    if (id.validated == true) {
+      d.append("validated", false);
+    } else {
+      d.append("validated", true);
+    }
+
+    updateDiagnostic(d, id.id);
+    setTimeout(() => {
+      getDiagnostics(patient.id);
+    }, 750);
+  }
+
+  const updateButton1 = (props) => {
+    return (
+      <button
+        type="button"
+        class="btn btn-block btn-secondary"
+        style={{ width: "30px", borderRadius: "4px", height: "30px" }}
+        onClick={(e) => update1(e, props.data)}>
+        <ion-icon style={{ "font-size": "20px" }} name="create"></ion-icon>
+      </button>
+    );
+  };
+  const deleteButton1 = (props) => {
+    return (
+      <button
+        data-toggle="modal"
+        data-target="#exampleModal1"
+        type="button"
+        class="btn btn-block btn-secondary"
+        style={{ width: "30px", borderRadius: "4px", height: "30px" }}
+        onClick={(e) => remove1(e, props.data)}>
+        <ion-icon
+          style={{ "font-size": "20px" }}
+          name="trash-outline"></ion-icon>
+      </button>
+    );
+  };
+
+  ////////////end of diagnostic table code //////
 
   const updateButton = (props) => {
     return (
@@ -550,6 +660,221 @@ function UpdatePatient({
 
                 {/* /.card-footer*/}
               </div>
+
+              {/*diagnostic  */}
+              <div className="card" style={{ width: "100%" }}>
+                <div
+                  className="card-header"
+                  style={{ backgroundColor: "#28a745" }}>
+                  <h3 className="card-title" style={{ color: "white" }}>
+                    Add patient diagnostic{" "}
+                  </h3>
+                  <div className="card-tools">
+                    <button
+                      type="button"
+                      className="btn btn-tool"
+                      data-card-widget="collapse"
+                      title="Collapse">
+                      <i className="fas fa-minus" />
+                    </button>
+                  </div>
+                </div>
+                <div className="card-body" style={{ display: "block" }}>
+                  {/* 7ot lena el code  */}
+                  <form onSubmit={(e) => onSubmitDiagnostic(e)}>
+                    <div className="card-body">
+                      <div className="row">
+                        {" "}
+                        <div className="form-group">
+                          <div className="col-10">
+                            {/* select */}
+                            <div className="form-group">
+                              <label>Cough : </label>
+                              <select
+                                className="custom-select"
+                                id="cough"
+                                name="cough"
+                                value={cough}
+                                onChange={(e) => onChangeDiag(e)}>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="form-group">
+                          <div className="col-10">
+                            {/* select */}
+                            <div className="form-group">
+                              <label>Fever : </label>
+                              <select
+                                className="custom-select"
+                                id="fever"
+                                name="fever"
+                                value={fever}
+                                onChange={(e) => onChangeDiag(e)}>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="form-group">
+                          <div className="col-10">
+                            {/* select */}
+                            <div className="form-group">
+                              <label>Sore Throat : </label>
+                              <select
+                                className="custom-select"
+                                id="sore_throat"
+                                name="sore_throat"
+                                value={sore_throat}
+                                onChange={(e) => onChangeDiag(e)}>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="form-group">
+                          <div className="col-10">
+                            {/* select */}
+                            <div className="form-group">
+                              <label>Shortness Of Breath : </label>
+                              <select
+                                className="custom-select"
+                                id="shortness_of_breath"
+                                name="shortness_of_breath"
+                                value={shortness_of_breath}
+                                onChange={(e) => onChangeDiag(e)}>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="form-group">
+                          <div className="col-10">
+                            {/* select */}
+                            <div className="form-group">
+                              <label>Headache : </label>
+                              <select
+                                className="custom-select"
+                                id="head_ache"
+                                name="head_ache"
+                                value={head_ache}
+                                onChange={(e) => onChangeDiag(e)}>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" className="btn btn-success">
+                      Submit
+                    </button>
+                    {/* /.card-body */}
+                  </form>
+                  {/* 7ot lena el code end*/}
+                  {/* tests table */}
+                  <br />
+
+                  <div
+                    className="ag-theme-alpine"
+                    style={{ height: 500, width: "100%" }}>
+                    <AgGridReact
+                      rowData={diagnostics}
+                      onGridReady={onGridReady}
+                      sideBar={"filters"}
+                      // rowSelection="multiple"
+                      pagination={true}
+                      paginationPageSize={20}
+                      frameworkComponents={{
+                        update: updateButton1,
+                        delete: deleteButton1,
+                      }}
+                      enableCharts={true}>
+                      <AgGridColumn
+                        field="id"
+                        sortable={true}
+                        filter={true}
+                        //checkboxSelection={true}
+                        width={80}></AgGridColumn>
+                      <AgGridColumn
+                        headerName="cough"
+                        field="cough"
+                        sortable={true}
+                        filter={true}
+                        floatingFilter={true}
+                        width={110}></AgGridColumn>
+                      <AgGridColumn
+                        headerName="fever"
+                        field="fever"
+                        sortable={true}
+                        filter={true}
+                        floatingFilter={true}
+                        width={110}></AgGridColumn>
+                      <AgGridColumn
+                        headerName="sore throat"
+                        field="sore_throat"
+                        sortable={true}
+                        filter={true}
+                        floatingFilter={true}
+                        width={130}></AgGridColumn>
+                      <AgGridColumn
+                        headerName="shortness of breath"
+                        field="shortness_of_breath"
+                        sortable={true}
+                        filter={true}
+                        floatingFilter={true}
+                        width={180}></AgGridColumn>
+                      <AgGridColumn
+                        headerName="headache"
+                        field="head_ache"
+                        sortable={true}
+                        filter={true}
+                        floatingFilter={true}
+                        width={130}></AgGridColumn>
+                      <AgGridColumn
+                        headerName="date added"
+                        field="date_added"
+                        sortable={true}
+                        filter={true}
+                        width={150}></AgGridColumn>
+                      <AgGridColumn
+                        field="result"
+                        sortable={true}
+                        filter={true}
+                        width={130}
+                        floatingFilter={true}
+                        cellStyle={(e) =>
+                          dynamicCellStyleCovid(e)
+                        }></AgGridColumn>
+
+                      <AgGridColumn
+                        cellRenderer="update"
+                        width={50}
+                        colId="params"></AgGridColumn>
+                      <AgGridColumn
+                        cellRenderer="delete"
+                        width={50}
+                        colId="params"></AgGridColumn>
+                    </AgGridReact>
+                  </div>
+
+                  {/* tests table end  */}
+                </div>
+                {/* /.card-body */}
+
+                {/*lena diagnostic */}
+
+                {/* /.card-footer*/}
+              </div>
+              {/* mena zedt */}
+
+              {/**end of diagnostic  */}
               <div className="card" style={{ width: "100%" }}>
                 <div
                   className="card-header"
@@ -659,6 +984,9 @@ function UpdatePatient({
                 </div>
                 {/* /.card-body */}
 
+                {/*lena diagnostic */}
+
+                {/**end of diagnostic  */}
                 {/* /.card-footer*/}
               </div>
               {/* mena zedt */}
@@ -703,7 +1031,7 @@ function UpdatePatient({
                   <button
                     type="button"
                     class="btn btn-outline-light"
-                    onClick={confirmDelete}
+                    onClick={confirmDelete1}
                     data-dismiss="modal">
                     Yes delete this Test
                   </button>
@@ -714,6 +1042,55 @@ function UpdatePatient({
         </div>
       </div>
       {/* modal code  */}
+
+      {/* modal code for diagnosstic */}
+
+      <div>
+        <div
+          class="modal fade"
+          id="exampleModal1"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-content bg-danger">
+                <div class="modal-header">
+                  <h4 class="modal-title">Delete confirmation</h4>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure ? </p>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button
+                    data-dismiss="modal"
+                    type="button"
+                    class="btn btn-outline-light"
+                    data-dismiss="modal">
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-light"
+                    onClick={confirmDelete1}
+                    data-dismiss="modal">
+                    Yes delete this diagnostic
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* modal code for diagnostic */}
     </div>
   );
 }

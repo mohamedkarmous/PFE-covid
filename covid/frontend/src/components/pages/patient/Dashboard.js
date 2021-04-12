@@ -141,7 +141,7 @@ const Dashboard = ({
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item">
-                    <a href="#">Home</a>
+                    <Link to="/dashboard">Home</Link>
                   </li>
                   <li className="breadcrumb-item active">Doctor Dashboard</li>
                 </ol>
@@ -179,14 +179,12 @@ const Dashboard = ({
                     <h3>{numberOfInfected}</h3>
                     <p>Infected</p>
                   </div>
-
                   <Link to="/patient" className="small-box-footer">
                     More info <i className="fas fa-arrow-circle-right" />
                   </Link>
                 </div>
               </div>
               {/* ./col */}
-
               <div className="col-lg-4 col-6">
                 {/* small box */}
                 <div className="small-box bg-warning">
@@ -194,7 +192,6 @@ const Dashboard = ({
                     <h3>{numberOfRecovered}</h3>
                     <p>Recovered</p>
                   </div>
-
                   <Link to="/patient" className="small-box-footer">
                     More info <i className="fas fa-arrow-circle-right" />
                   </Link>
@@ -273,7 +270,6 @@ const Dashboard = ({
                                 data: Object.values(RecoveredAge),
                                 backgroundColor: "#e6e600",
                                 borderColor: "#e6e600",
-
                                 borderWidth: 1,
                               },
                             ],
@@ -292,7 +288,6 @@ const Dashboard = ({
                                   stacked: true,
                                 },
                               ],
-
                               yAxes: [
                                 {
                                   stacked: true,
@@ -317,7 +312,6 @@ const Dashboard = ({
                                 backgroundColor: [
                                   "rgba(54, 162, 235, 0.2)",
                                   "rgba(255, 99, 132, 0.2)",
-
                                   "rgba(255, 206, 86, 0.2)",
                                   "rgba(75, 192, 192, 0.2)",
                                   "rgba(153, 102, 255, 0.2)",
@@ -326,7 +320,6 @@ const Dashboard = ({
                                 borderColor: [
                                   "rgba(54, 162, 235, 1)",
                                   "rgba(255, 99, 132, 1)",
-
                                   "rgba(255, 206, 86, 1)",
                                   "rgba(75, 192, 192, 1)",
                                   "rgba(153, 102, 255, 1)",

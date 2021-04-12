@@ -282,7 +282,7 @@ const AdminDashboard = ({
                 <div className="col-sm-6">
                   <ol className="breadcrumb float-sm-right">
                     <li className="breadcrumb-item">
-                      <a href="#">Home</a>
+                      <Link to="/dashboard">Home</Link>
                     </li>
                     <li className="breadcrumb-item active">Admin Dashboard</li>
                   </ol>
@@ -735,7 +735,7 @@ const AdminDashboard = ({
                   {/* line chart */}
                   <div className="card card-info">
                     <div className="card-header">
-                      <h3 className="card-title">Distribution by Date</h3>
+                      <h3 className="card-title">Tests distribution by Date</h3>
                       <div className="card-tools">
                         <button
                           type="button"
