@@ -367,7 +367,7 @@ const Dashboard = ({
                     </div>
                     <Line
                       data={{
-                        labels: Object.keys(InfectedTests),
+                        labels: Object.keys(InfectedTests).sort(),
                         datasets: [
                           {
                             label: "Covid19",
