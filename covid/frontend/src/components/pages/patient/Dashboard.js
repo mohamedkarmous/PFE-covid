@@ -511,7 +511,7 @@ const Dashboard = ({
                 {/* /.card */}
                 <div className="card card-info">
                   <div className="card-header">
-                    <h3 className="card-title">Distribution by sex</h3>
+                    <h3 className="card-title">Distribution by gender</h3>
                     <div className="card-tools">
                       <button
                         type="button"

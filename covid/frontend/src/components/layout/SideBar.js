@@ -190,14 +190,17 @@ const SideBar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
     <div>
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
         {/* Brand Logo */}
-        <a href="index3.html" className="brand-link">
-          <img
-            src="logo_covid.png"
-            alt="Covid-19"
-            className="brand-image img-circle elevation-3"
-            style={{ opacity: ".8" }}
-          />
-          <span className="brand-text font-weight-light">COVID 19</span>
+        <a className="brand-link">
+          <Link to="/dashboard" style={{ color: "white" }}>
+            {" "}
+            <img
+              src="logo_covid.png"
+              alt="Covid-19"
+              className="brand-image img-circle elevation-3"
+              style={{ opacity: ".8" }}
+            />
+            <span className="brand-text font-weight-light">COVID 19</span>
+          </Link>
         </a>
 
         {/* Sidebar */}

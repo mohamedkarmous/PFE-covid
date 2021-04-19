@@ -648,7 +648,7 @@ const AdminDashboard = ({
                   {/* /.card */}
                   <div className="card card-info">
                     <div className="card-header">
-                      <h3 className="card-title">Distribution by sex</h3>
+                      <h3 className="card-title">Distribution by gender</h3>
                       <div className="card-tools">
                         <button
                           type="button"
@@ -735,7 +735,7 @@ const AdminDashboard = ({
                   {/* line chart */}
                   <div className="card card-info">
                     <div className="card-header">
-                      <h3 className="card-title">Tests distribution by Date</h3>
+                      <h3 className="card-title">Tests distribution by date</h3>
                       <div className="card-tools">
                         <button
                           type="button"

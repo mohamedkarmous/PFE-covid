@@ -24,6 +24,7 @@ export const TN = {
   "Ben Arous": [36.7545, 10.2217],
   Manouba: [36.8101, 10.0956],
 };
+
 export const stateNames = {
   Tunisia: {
     Tunis: [
