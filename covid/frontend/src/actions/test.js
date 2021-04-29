@@ -59,9 +59,9 @@ export const getTests = (id = -1) => async (dispatch) => {
   try {
     var res = {};
     if (id == -1) {
-      res = await axios.get("/api/test?ordering=-id");
+      res = await axios.get("/api/test?ordering=-id/");
     } else {
-      res = await axios.get("/api/test?search=" + id + "&ordering=-id");
+      res = await axios.get("/api/test?search=" + id + "&ordering=-id/");
     }
     dispatch({ type: GET_TESTS, payload: res.data });
   } catch (err) {

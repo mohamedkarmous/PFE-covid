@@ -57,9 +57,9 @@ export const getDiagnostics = (id = -1) => async (dispatch) => {
   try {
     var res = {};
     if (id == -1) {
-      res = await axios.get("/api/diagnostic?ordering=-id");
+      res = await axios.get("/api/diagnostic?ordering=-id/");
     } else {
-      res = await axios.get("/api/diagnostic?search=" + id + "&ordering=-id");
+      res = await axios.get("/api/diagnostic?search=" + id + "&ordering=-id/");
     }
     dispatch({ type: GET_DIAGNOSTICS, payload: res.data });
   } catch (err) {
